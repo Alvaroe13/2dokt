@@ -1,0 +1,16 @@
+package com.example.notes.model
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.example.notes.util.Constans.DATABASE_NAME
+
+@Entity( tableName = DATABASE_NAME)
+class Note(
+    var title: String = "",
+    var content: String = "",
+    var priority :Int = 0,
+    var timeStamp : Long = 0L
+){
+    @PrimaryKey(autoGenerate = true)
+    var id: Int? = null
+}
