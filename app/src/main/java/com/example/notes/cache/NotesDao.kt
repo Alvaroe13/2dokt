@@ -13,6 +13,6 @@ interface NotesDao  {
     @Delete
     suspend fun deleteNote(note: Note)
 
-    @Query("SELECT * FROM notes ORDER BY timeStamp")
-    suspend fun getNotesByTimeDes() : LiveData<List<Note>>
+    @Query("SELECT * FROM notes ORDER BY priority")
+    fun getNotesByPriorityDesc() : LiveData<List<Note>>
 }

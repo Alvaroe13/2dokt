@@ -5,8 +5,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.notes.model.Note
-import com.example.notes.util.Constans.DATABASE_NAME
-import com.example.notes.util.Constans.DATABASE_VERSION
+import com.example.notes.util.Constants.DATABASE_NAME
+import com.example.notes.util.Constants.DATABASE_VERSION
 
 @Database( entities = [Note::class] , version = DATABASE_VERSION)
 abstract class NotesDatabase: RoomDatabase() {

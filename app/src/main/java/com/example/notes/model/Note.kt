@@ -2,7 +2,7 @@ package com.example.notes.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.notes.util.Constans.DATABASE_NAME
+import com.example.notes.util.Constants.DATABASE_NAME
 
 @Entity( tableName = DATABASE_NAME)
 class Note(
