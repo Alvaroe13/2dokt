@@ -28,6 +28,7 @@ class NoteRoomFragment: Fragment(R.layout.fragment_note_room) {
         setHasOptionsMenu(true)
         toolbar()
     }
+
     private fun toolbar(){
         toolbar = activity?.toolbar
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
