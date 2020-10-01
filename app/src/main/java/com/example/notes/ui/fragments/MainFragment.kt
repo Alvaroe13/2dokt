@@ -31,7 +31,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     private fun getAllNotes() {
         viewModel.notes?.observe(viewLifecycleOwner, Observer {
-            println("DEBUGGING, note retrieved = ${it[0].content}")
         })
 
     }
