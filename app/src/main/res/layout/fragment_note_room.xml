@@ -3,16 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFF"
-    android:padding="15dp">
+    android:background="#03FFD8"
+    android:padding="5dp">
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/titleBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="title"
+        android:hint="Title"
+        android:gravity="center"
         android:singleLine="true"
-        android:textSize="20sp"
+        android:textSize="22sp"
+        android:backgroundTint="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,9 +24,13 @@
     <com.google.android.material.textfield.TextInputEditText
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:backgroundTint="#FFF"
+        android:background="@color/colorAccent"
+        android:backgroundTintMode="@color/colorAccent"
         android:gravity="top"
-        android:textSize="14sp"
+        android:textSize="18sp"
+        android:padding="25dp"
+        android:textColorHint="#FFF"
+        android:layout_marginTop="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

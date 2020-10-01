@@ -27,7 +27,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.98"
-        android:backgroundTint="#3BFF83"
+        android:backgroundTint="@color/colorPrimaryDark"
         android:src="@drawable/ic_add"
         app:borderWidth="0dp"
         app:fabSize="normal"
