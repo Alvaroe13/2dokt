@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
     }
 
-    //needed for toolbar backbutton
+    //needed for toolbar backButton
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
