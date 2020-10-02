@@ -25,6 +25,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         initRecyclerView()
         getAllNotes()
         fabClicked()
+        clickNote()
     }
 
     private fun initRecyclerView(){
@@ -47,6 +48,12 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             noteAdapter.differAsync.submitList(response)
         })
 
+    }
+
+    private fun clickNote(){
+        noteAdapter.setOnNoteClickListener {
+            println("MainFragment, note clicked = ${it.title} with content = ${it.content}")
+        }
     }
 }
 

@@ -44,7 +44,18 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter. NoteViewHolder>() {
             tvContent.text = note.content
             tvDate.text = note.timeStamp.toString()
             tvPriority.text = note.priority.toString()
+
+            setOnClickListener {
+                onItemClick?.let { it(note) }
+            }
         }
+    }
+    //----------click event--------------------//
+
+    private var onItemClick :((Note) -> Unit) ? = null
+
+    fun setOnNoteClickListener(listener : (Note) -> Unit){
+        onItemClick = listener
     }
 
 
