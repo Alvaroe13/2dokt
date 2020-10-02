@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.notes.R
@@ -76,7 +77,6 @@ class NoteRoomFragment: Fragment(R.layout.fragment_note_room) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.saveNote){
             saveNote(priority)
-            Snackbar.make(viewSnack, "Note saved", Snackbar.LENGTH_SHORT).show()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -85,8 +85,14 @@ class NoteRoomFragment: Fragment(R.layout.fragment_note_room) {
         title = noteTitle.text.toString()
         content = noteContent.text.toString()
         val note = Note(title, content, priority, 0)
-        viewModel.insertNote(note)
-        println("DEBUGGING, NoteRoomFragment, note title= ${note.title} + content =${note.content} + priority=${note.priority}")
+        if (title.isNotEmpty() && content.isNotEmpty()){
+            viewModel.insertNote(note)
+            Snackbar.make(viewSnack, "Note saved", Snackbar.LENGTH_SHORT).show()
+            println("DEBUGGING, NoteRoomFragment, note title= ${note.title} + content =${note.content} + priority=${note.priority}")
+        }else{
+            Toast.makeText(context, "No field can be empty" , Toast.LENGTH_SHORT).show()
+        }
+
     }
 
     override fun onPause() {
