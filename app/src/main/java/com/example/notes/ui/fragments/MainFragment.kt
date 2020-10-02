@@ -5,22 +5,34 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.notes.R
 import com.example.notes.ui.MainActivity
+import com.example.notes.ui.adapter.NoteAdapter
 import com.example.notes.viewModel.NoteViewModel
 import kotlinx.android.synthetic.main.fragment_main.*
 
 class MainFragment : Fragment(R.layout.fragment_main) {
 
     private lateinit var viewModel: NoteViewModel
+    private lateinit var noteAdapter: NoteAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         println("DEBUGGING, onViewCreated called!")
         viewModel = (activity as MainActivity).viewModel
+        initRecyclerView()
         getAllNotes()
         fabClicked()
+    }
+
+    private fun initRecyclerView(){
+        noteAdapter = NoteAdapter()
+        recycler.apply {
+            adapter = noteAdapter
+            layoutManager = LinearLayoutManager(activity)
+        }
     }
 
     private fun fabClicked() {
@@ -30,8 +42,12 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     }
 
     private fun getAllNotes() {
-        viewModel.notes?.observe(viewLifecycleOwner, Observer {
+        viewModel.getAllNotes().observe(viewLifecycleOwner, Observer { response ->
+            println("MainFragment, response size -> = ${response.size}")
+            noteAdapter.differAsync.submitList(response)
         })
 
     }
 }
+
+

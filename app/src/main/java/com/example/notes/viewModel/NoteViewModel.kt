@@ -21,9 +21,6 @@ class NoteViewModel(
         repository.deleteNote(note)
     }
 
-    fun getAllNotes() = viewModelScope.launch {
-        val noteList = repository.getAllNotes()
-        notes?.postValue(noteList.value)
-    }
+    fun getAllNotes() = repository.getAllNotes()
 
 }
