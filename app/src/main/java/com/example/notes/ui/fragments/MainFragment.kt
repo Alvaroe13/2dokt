@@ -2,6 +2,7 @@ package com.example.notes.ui.fragments
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -60,6 +61,12 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     private fun clickNote(){
         noteAdapter.setOnNoteClickListener {
             println("MainFragment, note clicked = ${it.title} with content = ${it.content}")
+            val bundle = bundleOf(
+                "title" to it.title,
+                "content" to it.content,
+                "priority" to it.priority
+            )
+            findNavController().navigate(R.id.action_mainFragment_to_noteRoomFragment , bundle)
         }
     }
 

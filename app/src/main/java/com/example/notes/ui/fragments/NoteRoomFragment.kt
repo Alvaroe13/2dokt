@@ -1,14 +1,13 @@
 package com.example.notes.ui.fragments
 
 import android.os.Bundle
+import android.text.Editable
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
-import android.widget.Spinner
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.notes.R
@@ -19,25 +18,48 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_note_room.*
 
+private const val TAG = "NoteRoomFragment"
+
 class NoteRoomFragment: Fragment(R.layout.fragment_note_room) {
 
+    private lateinit var title: String
+    private lateinit var content: String
+    private var priority: Int = 0
     private var toolbar: androidx.appcompat.widget.Toolbar? = null
     private var toolbarTitle: TextView? = null
     private var spinner : Spinner? = null
     private lateinit var viewSnack :View
     private lateinit var viewModel: NoteViewModel
 
-    private lateinit var title: String
-    private lateinit var content: String
-    private var priority: Int = 0
+    private var incomingTitle: String? = null
+    private var incomingContent: String? = null
+    private var incomingPriority: String? = null 
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        incomingBundle()
         viewModel = (activity as MainActivity).viewModel
         viewSnack = view
         setHasOptionsMenu(true)
         toolbar()
         setPriority()
+    }
+
+    private fun incomingBundle(){
+        Log.d(TAG, "incomingBundle: called")
+        if (arguments != null){
+            Log.d(TAG, "incomingBundle: bundle not null")
+            incomingTitle = arguments?.getString("title")
+            incomingContent = arguments?.getString("content")
+            incomingPriority = arguments?.getString("priority")
+
+            noteTitle.setText(incomingTitle)
+            noteContent.setText(incomingContent)
+        }else{
+            Log.d(TAG, "incomingBundle: bundle NULL")
+            //here we make visible update icon
+        }
     }
 
     private fun toolbar(){
