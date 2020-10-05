@@ -62,6 +62,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         noteAdapter.setOnNoteClickListener {
             println("MainFragment, note clicked = ${it.title} with content = ${it.content}")
             val bundle = bundleOf(
+                "id" to it.id,
                 "title" to it.title,
                 "content" to it.content,
                 "priority" to it.priority

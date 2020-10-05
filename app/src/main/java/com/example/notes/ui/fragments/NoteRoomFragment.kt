@@ -1,13 +1,15 @@
 package com.example.notes.ui.fragments
 
 import android.os.Bundle
-import android.text.Editable
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.Spinner
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.notes.R
@@ -33,32 +35,38 @@ class NoteRoomFragment: Fragment(R.layout.fragment_note_room) {
 
     private var incomingTitle: String? = null
     private var incomingContent: String? = null
-    private var incomingPriority: String? = null 
+    private var incomingPriority: String? = null
+    private var isUpdating: Boolean = false
+    private var incomingID = 0
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        incomingBundle()
+
         viewModel = (activity as MainActivity).viewModel
         viewSnack = view
         setHasOptionsMenu(true)
         toolbar()
         setPriority()
+        incomingBundle()
     }
 
     private fun incomingBundle(){
-        Log.d(TAG, "incomingBundle: called")
         if (arguments != null){
+            isUpdating = true
             Log.d(TAG, "incomingBundle: bundle not null")
+
+            incomingID = arguments?.getInt("id")!!
             incomingTitle = arguments?.getString("title")
             incomingContent = arguments?.getString("content")
             incomingPriority = arguments?.getString("priority")
+            Log.d(TAG, "incomingBundle:  ID = $incomingID")
 
             noteTitle.setText(incomingTitle)
             noteContent.setText(incomingContent)
         }else{
             Log.d(TAG, "incomingBundle: bundle NULL")
-            //here we make visible update icon
+            isUpdating = false
         }
     }
 
@@ -94,23 +102,37 @@ class NoteRoomFragment: Fragment(R.layout.fragment_note_room) {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.toolbar_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.saveNote){
-            saveNote(priority)
+            if (isUpdating){
+                Log.d(TAG, "onOptionsItemSelected: isUpdating == true")
+                updateNote()
+            }else{
+                Log.d(TAG, "onOptionsItemSelected: isUpdating == false ")
+                saveNote()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun saveNote(priority : Int){
+    private fun updateNote() {
         title = noteTitle.text.toString()
         content = noteContent.text.toString()
-        val note = Note(title, content, priority, 0)
+        val updateNote = Note(incomingID,title, content, priority, 0)
+        viewModel.updateNote(updateNote)
+        Toast.makeText(context, "Note updated", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun saveNote(){
+        title = noteTitle.text.toString()
+        content = noteContent.text.toString()
+        val note = Note(0, title, content, priority, 0)
         if (title.isNotEmpty() && content.isNotEmpty()){
             viewModel.insertNote(note)
-            Snackbar.make(viewSnack, "Note saved", Snackbar.LENGTH_SHORT).show()
-            println("DEBUGGING, NoteRoomFragment, note title= ${note.title} + content =${note.content} + priority=${note.priority}")
+            Toast.makeText(context, "Note saved", Toast.LENGTH_SHORT).show()
         }else{
             Toast.makeText(context, "No field can be empty" , Toast.LENGTH_SHORT).show()
         }

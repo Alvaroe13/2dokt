@@ -17,6 +17,10 @@ class NoteViewModel(
         repository.insertNote(note)
     }
 
+    fun updateNote(note: Note) = viewModelScope.launch {
+        repository.update(note)
+    }
+
     fun deleteNote(note:Note) = viewModelScope.launch {
         repository.deleteNote(note)
     }
