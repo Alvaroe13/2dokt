@@ -11,5 +11,5 @@ class Note(
     var title: String = "",
     var content: String = "",
     var priority :Int = 0,
-    var timeStamp : Long = 0L
+    var timeStamp : String = ""
 )

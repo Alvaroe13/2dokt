@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import com.example.notes.R
 import com.example.notes.model.Note
 import com.example.notes.ui.MainActivity
+import com.example.notes.util.DateGenerator
 import com.example.notes.viewModel.NoteViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_note_room.*
@@ -29,7 +30,6 @@ class NoteRoomFragment: Fragment(R.layout.fragment_note_room) {
     private var toolbar: androidx.appcompat.widget.Toolbar? = null
     private var toolbarTitle: TextView? = null
     private var spinner : Spinner? = null
-    private lateinit var viewSnack :View
     private lateinit var viewModel: NoteViewModel
 
     private var incomingTitle: String? = null
@@ -37,34 +37,33 @@ class NoteRoomFragment: Fragment(R.layout.fragment_note_room) {
     private var incomingPriority: String? = null
     private var isUpdating: Boolean = false
     private var incomingID = 0
+    private var timeStamp=  DateGenerator.getDate()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = (activity as MainActivity).viewModel
-        viewSnack = view
         setHasOptionsMenu(true)
         toolbar()
         setPriority()
         incomingBundle()
+        noteTitle.setText(incomingTitle)
+        noteContent.setText(incomingContent)
     }
 
     private fun incomingBundle(){
         if (arguments != null){
-            isUpdating = true
             Log.d(TAG, "incomingBundle: bundle not null")
-
+            //needed to keep track if toolbar icon should act as insert or update in DAO
+            isUpdating = true
             incomingID = arguments?.getInt("id")!!
             incomingTitle = arguments?.getString("title")
             incomingContent = arguments?.getString("content")
             incomingPriority = arguments?.getString("priority")
-            Log.d(TAG, "incomingBundle:  ID = $incomingID")
-
-            noteTitle.setText(incomingTitle)
-            noteContent.setText(incomingContent)
         }else{
             Log.d(TAG, "incomingBundle: bundle NULL")
+            //needed to keep track if toolbar icon should act as insert or update in DAO
             isUpdating = false
         }
     }
@@ -120,7 +119,7 @@ class NoteRoomFragment: Fragment(R.layout.fragment_note_room) {
     private fun updateNote() {
         title = noteTitle.text.toString()
         content = noteContent.text.toString()
-        val updateNote = Note(incomingID,title, content, priority, 0)
+        val updateNote = Note(incomingID,title, content, priority, timeStamp)
         viewModel.updateNote(updateNote)
         Toast.makeText(context, "Note updated", Toast.LENGTH_SHORT).show()
     }
@@ -128,7 +127,7 @@ class NoteRoomFragment: Fragment(R.layout.fragment_note_room) {
     private fun saveNote(){
         title = noteTitle.text.toString()
         content = noteContent.text.toString()
-        val note = Note(0, title, content, priority, 0)
+        val note = Note(0, title, content, priority, timeStamp)
         if (title.isNotEmpty() && content.isNotEmpty()){
             viewModel.insertNote(note)
             Toast.makeText(context, "Note saved", Toast.LENGTH_SHORT).show()
