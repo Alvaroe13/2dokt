@@ -16,7 +16,6 @@ import com.example.notes.R
 import com.example.notes.model.Note
 import com.example.notes.ui.MainActivity
 import com.example.notes.viewModel.NoteViewModel
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_note_room.*
 
@@ -26,7 +25,7 @@ class NoteRoomFragment: Fragment(R.layout.fragment_note_room) {
 
     private lateinit var title: String
     private lateinit var content: String
-    private var priority: Int = 0
+    private var priority: Int = 1
     private var toolbar: androidx.appcompat.widget.Toolbar? = null
     private var toolbarTitle: TextView? = null
     private var spinner : Spinner? = null
