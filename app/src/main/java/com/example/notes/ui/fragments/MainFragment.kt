@@ -1,6 +1,7 @@
 package com.example.notes.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -16,7 +17,9 @@ import com.example.notes.ui.adapter.NoteAdapter
 import com.example.notes.viewModel.NoteViewModel
 import kotlinx.android.synthetic.main.fragment_main.*
 
-class MainFragment : Fragment(R.layout.fragment_main) {
+private const val TAG = "MainFragment"
+
+class MainFragment : Fragment(R.layout.fragment_main), NoteAdapter.ClickHandler {
 
     private lateinit var viewModel: NoteViewModel
     private lateinit var noteAdapter: NoteAdapter
@@ -26,17 +29,15 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        println("DEBUGGING, onViewCreated called!")
         viewModel = (activity as MainActivity).viewModel
         initRecyclerView()
         getAllNotes()
         fabClicked()
-        clickNote()
         deleteNote()
     }
 
-    private fun initRecyclerView(){
-        noteAdapter = NoteAdapter()
+    private fun initRecyclerView() {
+        noteAdapter = NoteAdapter(this)
         recycler.apply {
             adapter = noteAdapter
             layoutManager = LinearLayoutManager(activity)
@@ -58,30 +59,16 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     }
 
-    private fun clickNote(){
-        noteAdapter.setOnNoteClickListener {
-            println("MainFragment, note clicked = ${it.title} with content = ${it.content}")
-            val bundle = bundleOf(
-                "id" to it.id,
-                "title" to it.title,
-                "content" to it.content,
-                "priority" to it.priority
-            )
-            findNavController().navigate(R.id.action_mainFragment_to_noteRoomFragment , bundle)
-        }
-    }
+    private fun deleteNote() {
 
-
-    private fun deleteNote(){
-
-        itemHelper = object : ItemTouchHelper.SimpleCallback(0 , ItemTouchHelper.LEFT){
+        itemHelper = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
-               return false
+                return false
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -95,6 +82,18 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
         val swipeToDelete = ItemTouchHelper(itemHelper as ItemTouchHelper.SimpleCallback)
         swipeToDelete.attachToRecyclerView(recycler)
+    }
+
+    override fun itemClick(position: Int) {
+        val note = noteList[position]
+        Log.d(TAG, "itemClick: priority = ${note.priority} ")
+        val bundle = bundleOf(
+            "id" to note.id,
+            "title" to note.title,
+            "content" to note.content,
+            "priority" to note.priority
+        )
+        findNavController().navigate(R.id.action_mainFragment_to_noteRoomFragment, bundle)
     }
 
 }

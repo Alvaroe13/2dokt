@@ -10,6 +10,6 @@ class Note(
     var id: Int,
     var title: String = "",
     var content: String = "",
-    var priority :Int = 0,
+    var priority :Int,
     var timeStamp : String = ""
 )

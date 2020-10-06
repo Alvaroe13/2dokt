@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import com.example.notes.R
 import com.example.notes.model.Note
 import com.example.notes.ui.MainActivity
+import com.example.notes.util.Constants.SPINNER_DEFAULT_VALUE
 import com.example.notes.util.DateGenerator
 import com.example.notes.viewModel.NoteViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -22,22 +23,24 @@ import kotlinx.android.synthetic.main.fragment_note_room.*
 
 private const val TAG = "NoteRoomFragment"
 
-class NoteRoomFragment: Fragment(R.layout.fragment_note_room) {
+class NoteRoomFragment : Fragment(R.layout.fragment_note_room) {
 
+   //ui
+    private var toolbar: androidx.appcompat.widget.Toolbar? = null
+    private var toolbarTitle: TextView? = null
+    private var spinner: Spinner? = null
+    private lateinit var viewModel: NoteViewModel
+    //vars
     private lateinit var title: String
     private lateinit var content: String
     private var priority: Int = 1
-    private var toolbar: androidx.appcompat.widget.Toolbar? = null
-    private var toolbarTitle: TextView? = null
-    private var spinner : Spinner? = null
-    private lateinit var viewModel: NoteViewModel
-
+    //bundle var
     private var incomingTitle: String? = null
     private var incomingContent: String? = null
-    private var incomingPriority: String? = null
+    private var incomingPriority: Int = 0
     private var isUpdating: Boolean = false
     private var incomingID = 0
-    private var timeStamp=  DateGenerator.getDate()
+    private var timeStamp = DateGenerator.getDate()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -46,29 +49,30 @@ class NoteRoomFragment: Fragment(R.layout.fragment_note_room) {
         viewModel = (activity as MainActivity).viewModel
         setHasOptionsMenu(true)
         toolbar()
-        setPriority()
+        spinnerListener()
         incomingBundle()
+        setSpinnerPosition()
         noteTitle.setText(incomingTitle)
         noteContent.setText(incomingContent)
     }
 
-    private fun incomingBundle(){
-        if (arguments != null){
+    private fun incomingBundle() {
+        if (arguments != null) {
             Log.d(TAG, "incomingBundle: bundle not null")
             //needed to keep track if toolbar icon should act as insert or update in DAO
             isUpdating = true
             incomingID = arguments?.getInt("id")!!
-            incomingTitle = arguments?.getString("title")
-            incomingContent = arguments?.getString("content")
-            incomingPriority = arguments?.getString("priority")
-        }else{
+            incomingTitle = arguments?.getString("title").toString()
+            incomingContent = arguments?.getString("content").toString()
+            incomingPriority = requireArguments().getInt("priority")
+        } else {
             Log.d(TAG, "incomingBundle: bundle NULL")
             //needed to keep track if toolbar icon should act as insert or update in DAO
             isUpdating = false
         }
     }
 
-    private fun toolbar(){
+    private fun toolbar() {
         toolbar = activity?.toolbar
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -80,61 +84,65 @@ class NoteRoomFragment: Fragment(R.layout.fragment_note_room) {
         spinner?.visibility = View.VISIBLE
     }
 
-    private fun setPriority() {
+    private fun spinnerListener() {
         spinner!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
 
             override fun onItemSelected(parent: AdapterView<*>?,view: View?,position: Int,id: Long){
-                when (position) {
-                    0 -> priority = 1
-                    1 -> priority = 2
-                    2 -> priority = 3
-                    3 -> priority = 4
-                    4 -> priority = 5
-                }
+                //this value is set only if user tocuhes spinner.
+                priority = position + 1
             }
         }
 
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.saveNote){
-            if (isUpdating){
-                Log.d(TAG, "onOptionsItemSelected: isUpdating == true")
-                updateNote()
-            }else{
-                Log.d(TAG, "onOptionsItemSelected: isUpdating == false ")
-                saveNote()
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun updateNote() {
         title = noteTitle.text.toString()
         content = noteContent.text.toString()
-        val updateNote = Note(incomingID,title, content, priority, timeStamp)
+        val updateNote = Note(incomingID, title, content, priority, timeStamp)
         viewModel.updateNote(updateNote)
         Toast.makeText(context, "Note updated", Toast.LENGTH_SHORT).show()
     }
 
-    private fun saveNote(){
+    private fun saveNote() {
         title = noteTitle.text.toString()
         content = noteContent.text.toString()
         val note = Note(0, title, content, priority, timeStamp)
-        if (title.isNotEmpty() && content.isNotEmpty()){
+        if (title.isNotEmpty() && content.isNotEmpty()) {
             viewModel.insertNote(note)
             Toast.makeText(context, "Note saved", Toast.LENGTH_SHORT).show()
-        }else{
-            Toast.makeText(context, "No field can be empty" , Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, "No field can be empty", Toast.LENGTH_SHORT).show()
         }
+    }
 
+    private fun setSpinnerPosition() {
+        Log.d(TAG, "setSpinnerPosition: incomingPriority = $incomingPriority")
+        if (incomingPriority == 0){
+            spinner?.setSelection(SPINNER_DEFAULT_VALUE)
+        }else{
+            spinner?.setSelection(incomingPriority - 1)
+        }
+    }
+
+    //---------------- override functions ----------------------------//
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.toolbar_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.saveNote) {
+            if (isUpdating) {
+                Log.d(TAG, "onOptionsItemSelected: isUpdating == true")
+                updateNote()
+            } else {
+                Log.d(TAG, "onOptionsItemSelected: isUpdating == false ")
+                saveNote()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onPause() {

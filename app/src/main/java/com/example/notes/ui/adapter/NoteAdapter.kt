@@ -10,9 +10,10 @@ import com.example.notes.R
 import com.example.notes.model.Note
 import kotlinx.android.synthetic.main.note_single_layout.view.*
 
-class NoteAdapter : RecyclerView.Adapter<NoteAdapter. NoteViewHolder>() {
+class NoteAdapter(
+    private val listener : ClickHandler
+) : RecyclerView.Adapter<NoteAdapter. NoteViewHolder>() {
 
-    inner class NoteViewHolder(view :View) : RecyclerView.ViewHolder(view)
 
     private val differCallBack = object : DiffUtil.ItemCallback<Note>(){
         override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
@@ -42,20 +43,31 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter. NoteViewHolder>() {
         holder.itemView.apply {
             tvTitle.text = note.title
             tvContent.text = note.content
-            tvDate.text = note.timeStamp.toString()
+            tvDate.text = note.timeStamp
             tvPriority.text = note.priority.toString()
 
-            setOnClickListener {
-                onItemClick?.let { it(note) }
-            }
+
         }
     }
-    //----------click event--------------------//
 
-    private var onItemClick :((Note) -> Unit) ? = null
+    inner class NoteViewHolder(view :View) : RecyclerView.ViewHolder(view), View.OnClickListener{
 
-    fun setOnNoteClickListener(listener : (Note) -> Unit){
-        onItemClick = listener
+        init {
+            view.setOnClickListener (this)
+        }
+
+        override fun onClick(v: View?) {
+             val position = adapterPosition
+            if(position != RecyclerView.NO_POSITION ){
+                listener.itemClick(position)
+            }
+        }
+
+
+    }
+
+    interface ClickHandler{
+        fun itemClick(position: Int)
     }
 
 
