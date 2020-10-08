@@ -12,6 +12,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
 import com.example.notes.R
 import com.example.notes.model.Note
 import com.example.notes.ui.MainActivity
@@ -101,6 +103,7 @@ class NoteRoomFragment : Fragment(R.layout.fragment_note_room) {
         content = noteContent.text.toString()
         val updateNote = Note(incomingID, title, content, priority, timeStamp)
         viewModel.updateNote(updateNote)
+        goToMain()
         Toast.makeText(context, "Note updated", Toast.LENGTH_SHORT).show()
     }
 
@@ -110,7 +113,8 @@ class NoteRoomFragment : Fragment(R.layout.fragment_note_room) {
         val note = Note(0, title, content, priority, timeStamp)
         if (title.isNotEmpty() && content.isNotEmpty()) {
             viewModel.insertNote(note)
-            Toast.makeText(context, "Note saved", Toast.LENGTH_SHORT).show()
+            goToMain()
+            Toast.makeText(activity, "Note saved", Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(context, "No field can be empty", Toast.LENGTH_SHORT).show()
         }
@@ -123,6 +127,11 @@ class NoteRoomFragment : Fragment(R.layout.fragment_note_room) {
         }else{
             spinner?.setSelection(incomingPriority - 1)
         }
+    }
+
+    private fun goToMain(){
+        val navigation = NavOptions.Builder().setPopUpTo(R.id.nav_graph, true).build()
+        findNavController().navigate(R.id.action_noteRoomFragment_to_mainFragment2, null, navigation)
     }
 
     //---------------- override functions ----------------------------//

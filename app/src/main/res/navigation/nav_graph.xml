@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_graph"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
     app:startDestination="@id/mainFragment">
 
     <fragment
@@ -14,5 +15,9 @@
     <fragment
         android:id="@+id/noteRoomFragment"
         android:name="com.example.notes.ui.fragments.NoteRoomFragment"
-        android:label="NoteRoomFragment" />
+        android:label="NoteRoomFragment" >
+        <action
+            android:id="@+id/action_noteRoomFragment_to_mainFragment2"
+            app:destination="@id/mainFragment" />
+    </fragment>
 </navigation>
