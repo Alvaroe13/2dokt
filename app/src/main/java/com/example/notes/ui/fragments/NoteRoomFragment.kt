@@ -12,13 +12,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavOptions
-import androidx.navigation.fragment.findNavController
 import com.example.notes.R
 import com.example.notes.model.Note
 import com.example.notes.ui.MainActivity
 import com.example.notes.util.Constants.SPINNER_DEFAULT_VALUE
 import com.example.notes.util.DateGenerator
+import com.example.notes.util.NavHelper
 import com.example.notes.viewModel.NoteViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_note_room.*
@@ -32,6 +31,7 @@ class NoteRoomFragment : Fragment(R.layout.fragment_note_room) {
     private var toolbarTitle: TextView? = null
     private var spinner: Spinner? = null
     private lateinit var viewModel: NoteViewModel
+    private lateinit var layout :View
     //vars
     private lateinit var title: String
     private lateinit var content: String
@@ -48,6 +48,7 @@ class NoteRoomFragment : Fragment(R.layout.fragment_note_room) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        layout = view
         viewModel = (activity as MainActivity).viewModel
         setHasOptionsMenu(true)
         toolbar()
@@ -91,7 +92,7 @@ class NoteRoomFragment : Fragment(R.layout.fragment_note_room) {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
 
             override fun onItemSelected(parent: AdapterView<*>?,view: View?,position: Int,id: Long){
-                //this value is set only if user tocuhes spinner.
+                //this value is set only if user touches spinner.
                 priority = position + 1
             }
         }
@@ -130,11 +131,10 @@ class NoteRoomFragment : Fragment(R.layout.fragment_note_room) {
     }
 
     private fun goToMain(){
-        val navigation = NavOptions.Builder().setPopUpTo(R.id.nav_graph, true).build()
-        findNavController().navigate(R.id.action_noteRoomFragment_to_mainFragment2, null, navigation)
+        NavHelper.navigateWithoutStack(layout, R.id.action_noteRoomFragment_to_mainFragment2, null )
     }
 
-    //---------------- override functions ----------------------------//
+    //-------------------------------- override functions -----------------------------------------//
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.toolbar_menu, menu)

@@ -6,7 +6,6 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +13,7 @@ import com.example.notes.R
 import com.example.notes.model.Note
 import com.example.notes.ui.MainActivity
 import com.example.notes.ui.adapter.NoteAdapter
+import com.example.notes.util.NavHelper
 import com.example.notes.viewModel.NoteViewModel
 import kotlinx.android.synthetic.main.fragment_main.*
 
@@ -25,10 +25,12 @@ class MainFragment : Fragment(R.layout.fragment_main), NoteAdapter.ClickHandler 
     private lateinit var noteAdapter: NoteAdapter
     private var itemHelper: Any? = null
     private lateinit var noteList: List<Note>
+    private lateinit var layout : View
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        layout = view
         viewModel = (activity as MainActivity).viewModel
         initRecyclerView()
         getAllNotes()
@@ -46,7 +48,7 @@ class MainFragment : Fragment(R.layout.fragment_main), NoteAdapter.ClickHandler 
 
     private fun fabClicked() {
         fab.setOnClickListener {
-            findNavController().navigate(R.id.action_mainFragment_to_noteRoomFragment)
+            NavHelper.navigateWithStack(layout, R.id.action_mainFragment_to_noteRoomFragment, null)
         }
     }
 
@@ -93,7 +95,7 @@ class MainFragment : Fragment(R.layout.fragment_main), NoteAdapter.ClickHandler 
             "content" to note.content,
             "priority" to note.priority
         )
-        findNavController().navigate(R.id.action_mainFragment_to_noteRoomFragment, bundle)
+        NavHelper.navigateWithStack(layout ,R.id.action_mainFragment_to_noteRoomFragment, bundle)
     }
 
 }
