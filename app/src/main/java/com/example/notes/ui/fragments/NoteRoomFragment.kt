@@ -1,11 +1,13 @@
 package com.example.notes.ui.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.Spinner
 import android.widget.TextView
@@ -21,6 +23,7 @@ import com.example.notes.util.NavHelper
 import com.example.notes.viewModel.NoteViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_note_room.*
+import java.lang.Exception
 
 private const val TAG = "NoteRoomFragment"
 
@@ -105,6 +108,7 @@ class NoteRoomFragment : Fragment(R.layout.fragment_note_room) {
         val updateNote = Note(incomingID, title, content, priority, timeStamp)
         viewModel.updateNote(updateNote)
         goToMain()
+        hideKeyboard()
         Toast.makeText(context, "Note updated", Toast.LENGTH_SHORT).show()
     }
 
@@ -115,6 +119,7 @@ class NoteRoomFragment : Fragment(R.layout.fragment_note_room) {
         if (title.isNotEmpty() && content.isNotEmpty()) {
             viewModel.insertNote(note)
             goToMain()
+            hideKeyboard()
             Toast.makeText(activity, "Note saved", Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(context, "No field can be empty", Toast.LENGTH_SHORT).show()
@@ -132,6 +137,15 @@ class NoteRoomFragment : Fragment(R.layout.fragment_note_room) {
 
     private fun goToMain(){
         NavHelper.navigateWithoutStack(layout, R.id.action_noteRoomFragment_to_mainFragment2, null )
+    }
+
+    private fun hideKeyboard(){
+        try {
+            val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(requireView().windowToken, 0)
+        }catch (e : Exception){
+            e.printStackTrace()
+        }
     }
 
     //-------------------------------- override functions -----------------------------------------//
