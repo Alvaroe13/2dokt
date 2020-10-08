@@ -103,8 +103,8 @@ class NoteRoomFragment : Fragment(R.layout.fragment_note_room) {
     }
 
     private fun updateNote() {
-        title = noteTitle.text.toString()
-        content = noteContent.text.toString()
+        title = noteTitle.text?.trim().toString()
+        content = noteContent.text?.trim().toString()
         val updateNote = Note(incomingID, title, content, priority, timeStamp)
         viewModel.updateNote(updateNote)
         goToMain()
@@ -113,8 +113,8 @@ class NoteRoomFragment : Fragment(R.layout.fragment_note_room) {
     }
 
     private fun saveNote() {
-        title = noteTitle.text.toString()
-        content = noteContent.text.toString()
+        title = noteTitle.text?.trim().toString()
+        content = noteContent.text?.trim().toString()
         val note = Note(0, title, content, priority, timeStamp)
         if (title.isNotEmpty() && content.isNotEmpty()) {
             viewModel.insertNote(note)
