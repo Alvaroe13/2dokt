@@ -50,7 +50,7 @@ class NoteRoomFragment : Fragment(R.layout.fragment_note_room) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        Log.d(TAG, "onViewCreated: called")
         layout = view
         viewModel = (activity as MainActivity).viewModel
         setHasOptionsMenu(true)
@@ -61,6 +61,7 @@ class NoteRoomFragment : Fragment(R.layout.fragment_note_room) {
         noteTitle.setText(incomingTitle)
         noteContent.setText(incomingContent)
     }
+
 
     private fun incomingBundle() {
         if (arguments != null) {
@@ -87,7 +88,7 @@ class NoteRoomFragment : Fragment(R.layout.fragment_note_room) {
         toolbarTitle?.text = "Note"
 
         spinner = activity?.spinner
-        spinner?.visibility = View.VISIBLE
+        spinnerVisible()
     }
 
     private fun spinnerListener() {
@@ -168,8 +169,19 @@ class NoteRoomFragment : Fragment(R.layout.fragment_note_room) {
         return super.onOptionsItemSelected(item)
     }
 
+    private fun spinnerVisible(){
+        spinner?.visibility = View.VISIBLE
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "onResume: called")
+        spinnerVisible()
+    }
+
     override fun onPause() {
         super.onPause()
+        Log.d(TAG, "onPause: called")
         toolbarTitle!!.text = getString(R.string.app_name)
         spinner?.visibility = View.GONE
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
