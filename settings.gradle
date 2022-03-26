@@ -1,2 +1,7 @@
 include ':app'
 rootProject.name = "Notes"
+include ':note'
+include ':note:ui-notelist'
+include ':note:ui-notedetail'
+include ':note:note-domain'
+include ':note:note-datasource'
