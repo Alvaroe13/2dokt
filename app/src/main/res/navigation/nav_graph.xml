@@ -2,22 +2,17 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/splashFragment">
+
+    <include app:graph="@navigation/list_navigation" />
 
     <fragment
-        android:id="@+id/mainFragment"
-        android:name="com.example.notes.ui.fragments.MainFragment"
-        android:label="MainFragment" >
+        android:id="@+id/splashFragment"
+        android:name="com.example.notes.SplashFragment"
+        android:label="SplashFragment" >
         <action
-            android:id="@+id/action_mainFragment_to_noteRoomFragment"
-            app:destination="@id/noteRoomFragment" />
+            android:id="@+id/action_splashFragment_to_list_navigation"
+            app:destination="@id/list_navigation" />
     </fragment>
-    <fragment
-        android:id="@+id/noteRoomFragment"
-        android:name="com.example.notes.ui.fragments.NoteRoomFragment"
-        android:label="NoteRoomFragment" >
-        <action
-            android:id="@+id/action_noteRoomFragment_to_mainFragment2"
-            app:destination="@id/mainFragment" />
-    </fragment>
+
 </navigation>

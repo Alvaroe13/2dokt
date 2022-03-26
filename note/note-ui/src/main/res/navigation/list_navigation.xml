@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/list_navigation"
+    app:startDestination="@id/NoteListFragment">
+
+    <fragment
+        android:id="@+id/NoteListFragment"
+        android:name="com.alvaro.ui_note.notelist.NoteListFragment"
+        android:label="NoteListFragment" >
+        <action
+            android:id="@+id/action_NoteListFragment_to_noteDetailFragment"
+            app:destination="@id/noteDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/noteDetailFragment"
+        android:name="com.alvaro.ui_note.notedetail.NoteDetailFragment"
+        android:label="NoteDetailFragment" />
+
+</navigation>

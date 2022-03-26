@@ -16,8 +16,7 @@
             <option value="$PROJECT_DIR$/note" />
             <option value="$PROJECT_DIR$/note/note-datasource" />
             <option value="$PROJECT_DIR$/note/note-domain" />
-            <option value="$PROJECT_DIR$/note/ui-notedetail" />
-            <option value="$PROJECT_DIR$/note/ui-notelist" />
+            <option value="$PROJECT_DIR$/note/note-ui" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

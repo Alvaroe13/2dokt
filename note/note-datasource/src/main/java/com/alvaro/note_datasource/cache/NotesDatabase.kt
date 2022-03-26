@@ -1,14 +1,16 @@
 package com.alvaro.note_datasource.cache
 
+import android.content.Context
 import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
 
 const val DATABASE_NAME = "noteDb"
 const val DATABASE_VERSION = 1
 
 @Database( entities = [NoteEntity::class] , version = DATABASE_VERSION)
-abstract class NotesDatabase {
+abstract class NotesDatabase : RoomDatabase() {
 
-    /*RoomDatabase()
 
     abstract fun getDao(): NotesDao
 
@@ -26,5 +28,5 @@ abstract class NotesDatabase {
             Room.databaseBuilder( context.applicationContext,
             NotesDatabase::class.java, DATABASE_NAME)
                 .build()
-    }*/
+    }
 }
