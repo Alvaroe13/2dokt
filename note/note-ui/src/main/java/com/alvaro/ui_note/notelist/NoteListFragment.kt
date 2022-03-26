@@ -6,11 +6,15 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.alvaro.ui_note.R
 import com.alvaro.ui_note.databinding.FragmentNoteListBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class NoteListFragment : Fragment(R.layout.fragment_note_list) {
 
-    private val TAG = "MainFragment"
+    companion object{
+        private const val TAG = "MainFragment"
+    }
+
 
     //, NoteListAdapter.ClickHandler
 

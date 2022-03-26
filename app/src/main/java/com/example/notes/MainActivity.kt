@@ -2,7 +2,9 @@ package com.example.notes
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     /*private lateinit var vMFactory : com.alvaro.ui_note.notedetail.ViewModelFactory

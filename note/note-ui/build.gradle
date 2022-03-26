@@ -33,6 +33,10 @@ android {
     buildFeatures{
         viewBinding true
     }
+
+    packagingOptions {
+        pickFirst  '**'
+    }
 }
 
 dependencies {
@@ -47,4 +51,6 @@ dependencies {
     implementation(Libs.nav_ui)
     implementation(Libs.lifecycle_runtime)
     implementation(Libs.viewModel)
+    implementation(Libs.hilt)
+    implementation(Libs.hilt_kapt)
 }

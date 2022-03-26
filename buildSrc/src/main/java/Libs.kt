@@ -28,4 +28,8 @@ object Libs {
     //coroutines
     const val coroutines_android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Version.coroutines}"
     const val coroutines_core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Version.coroutines}"
+
+    //hilt
+    const val hilt = "com.google.dagger:hilt-android:${Version.hilt}"
+    const val hilt_kapt= "com.google.dagger:hilt-android-compiler:${Version.hilt}"
 }

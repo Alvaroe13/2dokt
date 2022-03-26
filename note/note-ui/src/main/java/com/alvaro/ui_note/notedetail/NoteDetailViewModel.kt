@@ -1,8 +1,11 @@
 package com.alvaro.ui_note.notedetail
 
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class NoteViewModel() : ViewModel() {
+@HiltViewModel
+class NoteDetailViewModel @Inject constructor()  : ViewModel() {
 
     //  private var repository : Repository
 

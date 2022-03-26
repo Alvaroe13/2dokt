@@ -9,4 +9,5 @@ object Version {
     const val constraint_layout = "2.1.3"
     const val jUnit = "4.12"
     const val material_design = "1.3.0-alpha01"
+    const val hilt = "2.41"
 }

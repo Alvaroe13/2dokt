@@ -2,10 +2,14 @@ package com.alvaro.ui_note.notedetail
 
 import androidx.fragment.app.Fragment
 import com.alvaro.ui_note.R
+import dagger.hilt.android.AndroidEntryPoint
 
-private const val TAG = "NoteRoomFragment"
-
+@AndroidEntryPoint
 class NoteDetailFragment : Fragment(R.layout.fragment_note_detail) {
+
+    companion object{
+        private const val TAG = "NoteRoomFragment"
+    }
 
    //ui
    /* private var toolbar: androidx.appcompat.widget.Toolbar? = null
