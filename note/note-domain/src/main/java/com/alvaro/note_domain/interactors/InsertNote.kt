@@ -7,12 +7,17 @@ import com.alvaro.note_domain.repository.NoteRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class InsertNote( private val noteRepository: NoteRepository) {
+class InsertNote(private val noteRepository: NoteRepository) {
 
-    fun execute(note: Note) : Flow<DataState<Long>> = flow {
-        try{
-            emit( DataState.Data( data = noteRepository.insertNote(note)) )
-        }catch (e: Exception){
+    fun execute(note: Note): Flow<DataState<Long>> = flow {
+        try {
+            emit(DataState.Data(data = noteRepository.insertNote(note)))
+            emit(
+                DataState.Response(
+                    uiComponent = UIComponent.Toast(message = "Note saved successfully")
+                )
+            )
+        } catch (e: Exception) {
             emit(
                 DataState.Response(
                     uiComponent = UIComponent.Dialog(

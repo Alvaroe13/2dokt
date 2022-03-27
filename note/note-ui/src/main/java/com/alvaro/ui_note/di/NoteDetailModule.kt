@@ -16,10 +16,10 @@ object NoteDetailModule {
 
     @Provides
     @Singleton
-    @Named("heroListLogger")
+    @Named("NoteDetailView")
     fun provideLogger(): Logger {
         return Logger(
-            tag = "HerolistView",
+            tag = "NoteDetailView",
             isDebug = true
         )
     }

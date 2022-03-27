@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alvaro.core.domain.DataState
 import com.alvaro.core.domain.LoadingState
+import com.alvaro.core.domain.UIComponent
 import com.alvaro.note_domain.interactors.InsertNote
 import com.alvaro.note_domain.model.Note
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,23 +18,36 @@ class NoteDetailViewModel @Inject constructor(
     private val insertNote: InsertNote
 ) : ViewModel() {
 
-
-    val notes = MutableLiveData<DataState<List<Note>>>(DataState.Loading(LoadingState.Idle))
+    val notes: MutableLiveData<NoteDetailState> = MutableLiveData(NoteDetailState())
+    val response: MutableLiveData<DataState.Response<UIComponent>> = MutableLiveData()
 
     init {
-        insertNote(Note.emptyNote())
+        triggerEvent(NoteDetailsEvents.InsertNote(Note.emptyNote()))
     }
 
-    fun insertNote(note: Note) {
+    fun triggerEvent(event: NoteDetailsEvents) {
+
+        notes.value = notes.value?.copy(loadingState = LoadingState.Loading)
+
+        when (event) {
+            is NoteDetailsEvents.InsertNote -> {
+                insertNote(event.note)
+            }
+            is NoteDetailsEvents.UpdateNote -> {
+            }
+        }
+    }
+
+    private fun insertNote(note: Note) {
 
         insertNote.execute(note).onEach { dataState ->
-            notes.value = DataState.Loading(LoadingState.Loading)
             when (dataState) {
                 is DataState.Data -> {
-                    notes.value = DataState.Loading(LoadingState.Idle)
+                    notes.value = notes.value?.copy(loadingState = LoadingState.Idle)
                 }
                 is DataState.Response -> {
-                    notes.value = DataState.Loading(LoadingState.Idle)
+                    notes.value = notes.value?.copy(loadingState = LoadingState.Idle)
+                    response.value = response.value?.copy(uiComponent = dataState.uiComponent)
                 }
             }
 
