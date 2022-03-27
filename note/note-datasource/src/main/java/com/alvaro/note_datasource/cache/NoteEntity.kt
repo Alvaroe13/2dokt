@@ -2,13 +2,16 @@ package com.alvaro.note_datasource.cache
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.*
 
-@Entity( tableName = NotesDatabase.DATABASE_NAME)
+@Entity(tableName = NotesDatabase.DATABASE_NAME)
 class NoteEntity(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     var id: Int,
     var title: String = "",
     var content: String = "",
-    var priority :Int,
-    var timeStamp : String = ""
+    var priority: Int = 0,
+    var timeStamp: String = ""
 )
+
+//UUID.randomUUID().toString().toInt()

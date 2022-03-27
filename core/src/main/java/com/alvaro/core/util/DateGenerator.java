@@ -1,4 +1,4 @@
-package com.example.notes.util;
+package com.alvaro.core.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

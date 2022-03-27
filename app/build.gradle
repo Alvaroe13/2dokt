@@ -64,6 +64,6 @@ dependencies {
     implementation(Libs.hilt)
     kapt(Libs.hilt_kapt)
     implementation(Libs.room)
-    implementation(Libs.room_compiler)
+    kapt(Libs.room_compiler)
     implementation(Libs.room_ktx_coroutines)
 }

@@ -44,6 +44,7 @@ class NoteDetailFragment : Fragment(R.layout.fragment_note_detail) {
         binding = FragmentNoteDetailBinding.bind(view)
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
+        viewModel
        /* toolbar()
         spinnerListener()
         incomingBundle()

@@ -2,6 +2,7 @@ package com.example.notes.di
 
 import android.content.Context
 import androidx.room.Room
+import com.alvaro.note_datasource.NoteMapper
 import com.alvaro.note_datasource.NoteRepositoryImpl
 import com.alvaro.note_datasource.cache.NotesDao
 import com.alvaro.note_datasource.cache.NotesDatabase
@@ -22,7 +23,8 @@ object DatabaseModule {
     fun provideNoteDatabase(@ApplicationContext context: Context): NotesDatabase {
         return Room.databaseBuilder(
             context.applicationContext,
-            NotesDatabase::class.java, NotesDatabase.DATABASE_NAME
+            NotesDatabase::class.java,
+            NotesDatabase.DATABASE_NAME
         ).build()
     }
 
@@ -34,8 +36,14 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideNoteRepository(noteDatabase: NotesDatabase): NoteRepository {
-        return NoteRepositoryImpl(noteDatabase)
+    fun provideNoteRepository(noteDatabase: NotesDatabase, noteMapper: NoteMapper): NoteRepository {
+        return NoteRepositoryImpl(noteDatabase , noteMapper)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNoteMapper(): NoteMapper {
+        return NoteMapper()
     }
 
 }

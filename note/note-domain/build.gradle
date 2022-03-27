@@ -9,4 +9,8 @@ java {
 }
 
 dependencies{
+    implementation project(":core")
+
+    implementation(Libs.coroutines_core)
+    implementation(Libs.coroutines_android)
 }

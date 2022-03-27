@@ -1,20 +1,19 @@
 package com.alvaro.note_datasource.cache
 
 import androidx.room.*
-import com.alvaro.note_domain.model.Note
 
 @Dao
 interface NotesDao  {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertNote(note: Note)
+    suspend fun insertNote(note: NoteEntity) : Long
 
     @Update
-    suspend fun updateNote(note: Note)
+    suspend fun updateNote(note: NoteEntity) : Int
 
     @Delete
-    suspend fun deleteNote(note: Note)
+    suspend fun deleteNote(note: NoteEntity) : Int
 
     @Query("SELECT * FROM noteDb ORDER BY priority DESC, timeStamp DESC")
-    fun getNotesByPriorityDesc() : List<Note>
+    fun getNotesByPriorityDesc() : List<NoteEntity>
 }
