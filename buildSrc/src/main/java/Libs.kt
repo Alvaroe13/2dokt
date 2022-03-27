@@ -1,6 +1,6 @@
 object Libs {
 
-    const val ktx_standard_lib = "org.jetbrains.kotlin:kotlin-stdlib:${Version.kotlin_version}"
+    const val ktx_standard_lib = "org.jetbrains.kotlin:kotlin-stdlib:${Version.kotlin}"
     const val androidCore = "androidx.core:core-ktx:${Version.android_core}"
     const val appCompat = "androidx.appcompat:appcompat:${Version.app_compat}"
     const val constraintLayout = "androidx.constraintlayout:constraintlayout:${Version.constraint_layout}"

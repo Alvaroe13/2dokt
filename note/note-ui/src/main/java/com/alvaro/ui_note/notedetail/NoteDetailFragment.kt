@@ -1,7 +1,11 @@
 package com.alvaro.ui_note.notedetail
 
+import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.alvaro.ui_note.R
+import com.alvaro.ui_note.databinding.FragmentNoteDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -10,6 +14,10 @@ class NoteDetailFragment : Fragment(R.layout.fragment_note_detail) {
     companion object{
         private const val TAG = "NoteRoomFragment"
     }
+
+    lateinit var binding : FragmentNoteDetailBinding
+
+    private val viewModel : NoteDetailViewModel by viewModels()
 
    //ui
    /* private var toolbar: androidx.appcompat.widget.Toolbar? = null
@@ -29,25 +37,23 @@ class NoteDetailFragment : Fragment(R.layout.fragment_note_detail) {
     private var incomingID = 0
     private var timeStamp = DateGenerator.getDate()
 
-    val SPINNER_DEFAULT_VALUE
+    val SPINNER_DEFAULT_VALUE*/
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding = FragmentNoteDetailBinding.bind(view)
         super.onViewCreated(view, savedInstanceState)
-        Log.d(TAG, "onViewCreated: called")
-        layout = view
-        viewModel = (activity as MainActivity).viewModel
         setHasOptionsMenu(true)
-        toolbar()
+       /* toolbar()
         spinnerListener()
         incomingBundle()
         setSpinnerPosition()
         noteTitle.setText(incomingTitle)
-        noteContent.setText(incomingContent)
+        noteContent.setText(incomingContent)*/
     }
 
 
-    private fun incomingBundle() {
+    /*private fun incomingBundle() {
         if (arguments != null) {
             Log.d(TAG, "incomingBundle: bundle not null")
             //needed to keep track if toolbar icon should act as insert or update in DAO

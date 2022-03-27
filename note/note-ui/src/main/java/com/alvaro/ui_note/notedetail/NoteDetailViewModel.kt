@@ -1,28 +1,29 @@
 package com.alvaro.ui_note.notedetail
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.alvaro.note_domain.interactors.InsertNote
+import com.alvaro.note_domain.model.Note
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class NoteDetailViewModel @Inject constructor()  : ViewModel() {
+class NoteDetailViewModel @Inject constructor(
+    private val insertNote: InsertNote
+)  : ViewModel() {
 
-    //  private var repository : Repository
 
-   /* val notes : MutableLiveData<List<Note>>? = null
+    val notes : MutableLiveData<List<Note>>? = null
 
     fun insertNote(note: Note) = viewModelScope.launch {
-        repository.insertNote(note)
+        insertNote.execute(note)
     }
 
-    fun updateNote(note: Note) = viewModelScope.launch {
+    /*fun updateNote(note: Note) = viewModelScope.launch {
         repository.update(note)
-    }
+    }*/
 
-    fun deleteNote(note:Note) = viewModelScope.launch {
-        repository.deleteNote(note)
-    }
-
-    fun getAllNotes() = repository.getAllNotes()*/
 
 }

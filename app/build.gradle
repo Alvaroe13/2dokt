@@ -3,6 +3,7 @@ plugins{
     id 'kotlin-android'
     id 'kotlin-android-extensions'
     id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 } 
 
 android {
@@ -32,16 +33,23 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-
     packagingOptions {
-        pickFirst  '**'
+        jniLibs {
+            pickFirsts += ['**']
+        }
+        resources {
+            pickFirsts += ['**']
+        }
     }
+
 }
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
     implementation project(':note:note-ui')
+    implementation project(':note:note-datasource')
+    implementation project(':note:note-domain')
 
     implementation (Libs.ktx_standard_lib)
     implementation(Libs.androidCore)
@@ -54,5 +62,8 @@ dependencies {
     implementation(Libs.lifecycle_runtime)
     implementation(Libs.viewModel)
     implementation(Libs.hilt)
-    implementation(Libs.hilt_kapt)
+    kapt(Libs.hilt_kapt)
+    implementation(Libs.room)
+    implementation(Libs.room_compiler)
+    implementation(Libs.room_ktx_coroutines)
 }

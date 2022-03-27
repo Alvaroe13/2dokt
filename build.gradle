@@ -1,14 +1,14 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    ext.kotlin_version = Libs.ktx_standard_lib
+    ext.kotlin_version = Version.kotlin
     repositories {
         google()
         jcenter()
     }
     dependencies {
-        classpath Build.gradle_plugin
-        classpath Build.gradle_plugin_kotlin
-        classpath Build.hilt_gradle_plugin
+        classpath(Build.gradle)
+        classpath(Build.gradle_plugin_kotlin)
+        classpath(Build.hilt_gradle_plugin)
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files

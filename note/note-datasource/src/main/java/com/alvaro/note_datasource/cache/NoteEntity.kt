@@ -3,7 +3,7 @@ package com.alvaro.note_datasource.cache
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity( tableName = DATABASE_NAME)
+@Entity( tableName = NotesDatabase.DATABASE_NAME)
 class NoteEntity(
     @PrimaryKey(autoGenerate = true)
     var id: Int,
