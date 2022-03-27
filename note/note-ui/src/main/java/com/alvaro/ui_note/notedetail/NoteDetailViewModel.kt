@@ -1,25 +1,32 @@
 package com.alvaro.ui_note.notedetail
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alvaro.core.domain.DataState
 import com.alvaro.core.domain.LoadingState
 import com.alvaro.core.domain.UIComponent
+import com.alvaro.core.util.Logger
 import com.alvaro.note_domain.interactors.InsertNote
 import com.alvaro.note_domain.model.Note
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
+import javax.inject.Named
 
 @HiltViewModel
 class NoteDetailViewModel @Inject constructor(
-    private val insertNote: InsertNote
+    private val insertNote: InsertNote,
+    @Named("NoteDetailView") private val logger: Logger
 ) : ViewModel() {
 
-    val notes: MutableLiveData<NoteDetailState> = MutableLiveData(NoteDetailState())
-    val response: MutableLiveData<DataState.Response<UIComponent>> = MutableLiveData()
+    val state : LiveData<NoteDetailState> get() = _state
+    private val _state: MutableLiveData<NoteDetailState> = MutableLiveData(NoteDetailState.build())
+
+    val response : LiveData<DataState.Response<UIComponent>> get() = _response
+    private val _response: MutableLiveData<DataState.Response<UIComponent>> = MutableLiveData()
 
     init {
         triggerEvent(NoteDetailsEvents.InsertNote(Note.emptyNote()))
@@ -27,7 +34,7 @@ class NoteDetailViewModel @Inject constructor(
 
     fun triggerEvent(event: NoteDetailsEvents) {
 
-        notes.value = notes.value?.copy(loadingState = LoadingState.Loading)
+        _state.value = _state.value?.copy(loadingState = LoadingState.Loading)
 
         when (event) {
             is NoteDetailsEvents.InsertNote -> {
@@ -43,11 +50,18 @@ class NoteDetailViewModel @Inject constructor(
         insertNote.execute(note).onEach { dataState ->
             when (dataState) {
                 is DataState.Data -> {
-                    notes.value = notes.value?.copy(loadingState = LoadingState.Idle)
+                    _state.value = _state.value?.copy(loadingState = LoadingState.Idle)
                 }
                 is DataState.Response -> {
-                    notes.value = notes.value?.copy(loadingState = LoadingState.Idle)
-                    response.value = response.value?.copy(uiComponent = dataState.uiComponent)
+                    _state.value = _state.value?.copy(loadingState = LoadingState.Idle)
+                    when (dataState.uiComponent) {
+                        is UIComponent.None -> {
+                            logger.log((dataState.uiComponent as UIComponent.None).message)
+                        }
+                        else -> {
+                            _response.value = _response.value?.copy(uiComponent = dataState.uiComponent)
+                        }
+                    }
                 }
             }
 

@@ -6,4 +6,11 @@ import com.alvaro.note_domain.model.Note
 data class NoteDetailState(
     val note: Note? = null,
     val loadingState: LoadingState = LoadingState.Idle
-)
+){
+
+    companion object{
+        fun build(): NoteDetailState {
+            return NoteDetailState()
+        }
+    }
+}
