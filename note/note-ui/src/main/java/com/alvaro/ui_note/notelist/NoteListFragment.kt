@@ -4,11 +4,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.alvaro.ui_note.R
 import com.alvaro.ui_note.databinding.FragmentNoteListBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class NoteListFragment : Fragment(R.layout.fragment_note_list) {
@@ -45,9 +46,13 @@ class NoteListFragment : Fragment(R.layout.fragment_note_list) {
     }
 
     private fun subscribeObservers() {
-        viewModel.state.observe(viewLifecycleOwner, { noteListState ->
-            println("$TAG, state result is = data ${noteListState.noteList} , loading state= ${noteListState.loadingState}")
-        })
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.state.collect { state ->
+                println("${TAG} triggered ${state}")
+            }
+        }
+
     }
 
     private fun fabClicked() {
