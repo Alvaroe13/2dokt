@@ -66,7 +66,10 @@ class NoteDetailViewModel @Inject constructor(
 
                     when (dataState) {
                         is DataState.Data -> {
-                            _state.value = _state.value.copy(loadingState = LoadingState.Idle)
+                            _state.value = _state.value.copy(
+                                loadingState = LoadingState.Idle,
+                                saveNoteType = SaveNoteType.InsertNote
+                            )
                         }
                         is DataState.Response -> {
                             _state.value = _state.value.copy(loadingState = LoadingState.Idle)

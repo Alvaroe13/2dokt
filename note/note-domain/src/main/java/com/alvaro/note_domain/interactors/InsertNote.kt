@@ -10,6 +10,18 @@ import kotlinx.coroutines.flow.flow
 class InsertNote(private val noteRepository: NoteRepository) {
 
     fun execute(note: Note): Flow<DataState<Long>> = flow {
+
+        if (!isValid(note)) {
+            emit(
+                DataState.Response(
+                    uiComponent = UIComponent.Toast(
+                        message = "Title and content must be not blank"
+                    )
+                )
+            )
+            return@flow
+        }
+
         try {
             emit(DataState.Data(data = noteRepository.insertNote(note)))
             emit(
@@ -27,5 +39,10 @@ class InsertNote(private val noteRepository: NoteRepository) {
                 )
             )
         }
+
+    }
+
+    private fun isValid(note: Note): Boolean {
+        return note.title.isNotBlank() && note.content.isNotBlank()
     }
 }

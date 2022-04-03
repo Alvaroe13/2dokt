@@ -1,6 +1,7 @@
 package com.alvaro.ui_note.di
 
 import com.alvaro.core.util.Logger
+import com.alvaro.core.util.TimeStampGenerator
 import com.alvaro.note_domain.interactors.GetNoteById
 import com.alvaro.note_domain.interactors.InsertNote
 import com.alvaro.note_domain.repository.NoteRepository
@@ -35,6 +36,12 @@ object NoteDetailModule {
     @Singleton
     fun provideGetNoteByIdInteractor(noteRepository: NoteRepository) : GetNoteById {
         return GetNoteById(noteRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTimeStampGenerator() : TimeStampGenerator {
+        return TimeStampGenerator()
     }
 
 }

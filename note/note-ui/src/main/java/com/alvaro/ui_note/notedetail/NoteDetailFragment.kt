@@ -1,97 +1,142 @@
 package com.alvaro.ui_note.notedetail
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
+import android.widget.AdapterView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.alvaro.core.domain.UIComponent
+import com.alvaro.core.util.TimeStampGenerator
 import com.alvaro.note_domain.model.Note
 import com.alvaro.ui_note.R
 import com.alvaro.ui_note.databinding.FragmentNoteDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class NoteDetailFragment : Fragment(R.layout.fragment_note_detail) {
 
-    companion object{
+    companion object {
         private const val TAG = "NoteRoomFragment"
     }
 
-    lateinit var binding : FragmentNoteDetailBinding
-    private val viewModel : NoteDetailViewModel by viewModels()
-    private var isUpdatingNote = false
+    lateinit var binding: FragmentNoteDetailBinding
+    private val viewModel: NoteDetailViewModel by viewModels()
+    private var note: Note? = null
+    private var priority: Int = 1
 
-
-    //private var timeStamp = DateGenerator.getDate()
+    @Inject
+    lateinit var timeStampGenerator: TimeStampGenerator
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentNoteDetailBinding.bind(view)
         super.onViewCreated(view, savedInstanceState)
 
-       /* spinnerListener() */
+        spinnerListener()
         subscribeObservers()
+        clickListeners()
+    }
+
+    private fun clickListeners() {
+        binding.saveIcon.setOnClickListener {
+            val note = Note.build(
+                id = note?.id,
+                title = binding.noteTitle.text?.trim().toString(),
+                content = binding.noteContent.text?.trim().toString(),
+                priority = priority,
+                timeStamp = timeStampGenerator.getDate() ?: "-"
+            )
+            triggerEvent(note)
+        }
     }
 
     private fun subscribeObservers() {
 
         lifecycleScope.launchWhenStarted {
-            viewModel.state.collect { state ->
-                state.note?.let {
-                    isUpdatingNote = true
-                    displayDetails(it)
+            viewModel.response.collect { value: UIComponent ->
+                when (value) {
+                    is UIComponent.Dialog -> {
+                        showDialog(value)
+                    }
+                    is UIComponent.Toast -> {
+                      showToast(value)
+                    }
+                    else -> {}
                 }
-                println("${TAG} triggered ${state}, isUpdatingNote = ${isUpdatingNote}")
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.state.collect { state: NoteDetailState ->
+                popBackStack(state)
+                showDetails(state)
+                println("${TAG} triggered ${state}")
             }
         }
 
     }
 
-    private fun displayDetails(note : Note){
-        binding.apply{
+    private fun popBackStack(state: NoteDetailState){
+        if (state.saveNoteType is SaveNoteType.InsertNote ||
+            state.saveNoteType is SaveNoteType.UpdateNote) {
+            findNavController().popBackStack()
+        }
+    }
+
+    private fun showDetails(state: NoteDetailState){
+        state.note?.let {
+            note = it
+            displayDetails(it)
+        }
+    }
+
+    private fun displayDetails(note: Note) {
+        binding.apply {
             noteTitle.setText(note.title)
             noteContent.setText(note.content)
-            spinnerPriority.setSelection(note.priority)
+            spinnerPriority.setSelection(note.priority - 1)
         }
     }
 
-
-    /*
-    private fun spinnerListener() {
-        spinner!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-
-            override fun onItemSelected(parent: AdapterView<*>?,view: View?,position: Int,id: Long){
-                //this value is set only if user touches spinner.
-                priority = position + 1
-            }
-        }
-
-    }
-
-    private fun updateNote() {
-        title = noteTitle.text?.trim().toString()
-        content = noteContent.text?.trim().toString()
-        val updateNote = Note(incomingID, title, content, priority, timeStamp)
-        viewModel.updateNote(updateNote)
-        goToMain()
-        hideKeyboard()
-        Toast.makeText(context, "Note updated", Toast.LENGTH_SHORT).show()
-    }
-
-    private fun saveNote() {
-        title = noteTitle.text?.trim().toString()
-        content = noteContent.text?.trim().toString()
-        val note = Note(0, title, content, priority, timeStamp)
-        if (title.isNotEmpty() && content.isNotEmpty()) {
-            viewModel.insertNote(note)
-            goToMain()
-            hideKeyboard()
-            Toast.makeText(activity, "Note saved", Toast.LENGTH_SHORT).show()
+    private fun triggerEvent(note: Note) {
+        if (note.id == null) {
+            viewModel.triggerEvent(NoteDetailsEvents.InsertNote(note))
         } else {
-            Toast.makeText(context, "No field can be empty", Toast.LENGTH_SHORT).show()
+            viewModel.triggerEvent(NoteDetailsEvents.UpdateNote(note))
         }
     }
-    */
+
+    private fun spinnerListener() {
+        binding.spinnerPriority.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    priority = position + 1
+                }
+            }
+
+    }
+
+    private fun showToast(uiComponent: UIComponent.Toast){
+        Toast.makeText(requireContext(), uiComponent.message, Toast.LENGTH_LONG).show()
+    }
+
+    private fun showDialog(uiComponent: UIComponent.Dialog){
+        val builder = AlertDialog.Builder(this@NoteDetailFragment.context)
+        builder.setTitle(uiComponent.title)
+        builder.setMessage(uiComponent.message)
+        builder.show()
+    }
 
 }

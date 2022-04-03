@@ -2,13 +2,12 @@ package com.alvaro.note_datasource
 
 import com.alvaro.note_datasource.cache.NoteEntity
 import com.alvaro.note_domain.model.Note
-import java.util.*
 
 class NoteMapper {
 
     fun mapFrom(note: Note) : NoteEntity {
         return NoteEntity(
-            id = note.id ?: UUID.randomUUID().toString().toInt(),
+            id = note.id ?: (0 until 1000).random(),
             title = note.title,
             content = note.content,
             priority = note.priority,
