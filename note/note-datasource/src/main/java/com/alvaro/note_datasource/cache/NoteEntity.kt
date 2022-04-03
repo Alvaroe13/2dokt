@@ -2,7 +2,6 @@ package com.alvaro.note_datasource.cache
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.*
 
 @Entity(tableName = NotesDatabase.DATABASE_NAME)
 class NoteEntity(
@@ -13,5 +12,3 @@ class NoteEntity(
     var priority: Int = 0,
     var timeStamp: String = ""
 )
-
-//UUID.randomUUID().toString().toInt()

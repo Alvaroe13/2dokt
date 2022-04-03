@@ -62,7 +62,7 @@ class NoteListAdapter(
         override fun onClick(v: View?) {
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {
-                listener.itemClick(differAsync.currentList[position].id)
+                listener.itemClick(differAsync.currentList[position].id!!)
             }
         }
 

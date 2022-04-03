@@ -36,12 +36,10 @@ class NoteDetailViewModel @Inject constructor(
     private val _response: MutableSharedFlow<UIComponent> = MutableSharedFlow()
 
     init {
-
         val noteId = savedStateHandle.get<Int>(NoteListFragment.NOTE_ID_KEY) ?: -1
         if (noteId != -1){
             triggerEvent(NoteDetailsEvents.GetNoteById(noteId))
         }
-
     }
 
     fun triggerEvent(event: NoteDetailsEvents) {

@@ -19,40 +19,17 @@ class NoteDetailFragment : Fragment(R.layout.fragment_note_detail) {
     }
 
     lateinit var binding : FragmentNoteDetailBinding
-
     private val viewModel : NoteDetailViewModel by viewModels()
+    private var isUpdatingNote = false
 
-   //ui
-   /* private var toolbar: androidx.appcompat.widget.Toolbar? = null
-    private var toolbarTitle: TextView? = null
-    private var spinner: Spinner? = null
-    private lateinit var viewModel: NoteViewModel
-    private lateinit var layout :View
-    //vars
-    private lateinit var title: String
-    private lateinit var content: String
-    private var priority: Int = 1
-    //bundle var
-    private var incomingTitle: String? = null
-    private var incomingContent: String? = null
-    private var incomingPriority: Int = 0
-    private var isUpdating: Boolean = false
-    private var incomingID = 0
-    private var timeStamp = DateGenerator.getDate()
 
-    val SPINNER_DEFAULT_VALUE*/
-
+    //private var timeStamp = DateGenerator.getDate()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentNoteDetailBinding.bind(view)
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
-       /* toolbar()
-        spinnerListener()
-        incomingBundle()
-        setSpinnerPosition()
-        noteTitle.setText(incomingTitle)
-        noteContent.setText(incomingContent)*/
+
+       /* spinnerListener() */
         subscribeObservers()
     }
 
@@ -60,8 +37,11 @@ class NoteDetailFragment : Fragment(R.layout.fragment_note_detail) {
 
         lifecycleScope.launchWhenStarted {
             viewModel.state.collect { state ->
-                println("${TAG} triggered ${state}")
-                state.note?.let { displayDetails(it) }
+                state.note?.let {
+                    isUpdatingNote = true
+                    displayDetails(it)
+                }
+                println("${TAG} triggered ${state}, isUpdatingNote = ${isUpdatingNote}")
             }
         }
 
@@ -71,38 +51,12 @@ class NoteDetailFragment : Fragment(R.layout.fragment_note_detail) {
         binding.apply{
             noteTitle.setText(note.title)
             noteContent.setText(note.content)
+            spinnerPriority.setSelection(note.priority)
         }
     }
 
 
-    /*private fun incomingBundle() {
-        if (arguments != null) {
-            Log.d(TAG, "incomingBundle: bundle not null")
-            //needed to keep track if toolbar icon should act as insert or update in DAO
-            isUpdating = true
-            incomingID = arguments?.getInt("id")!!
-            incomingTitle = arguments?.getString("title").toString()
-            incomingContent = arguments?.getString("content").toString()
-            incomingPriority = requireArguments().getInt("priority")
-        } else {
-            Log.d(TAG, "incomingBundle: bundle NULL")
-            //needed to keep track if toolbar icon should act as insert or update in DAO
-            isUpdating = false
-        }
-    }
-
-    private fun toolbar() {
-        toolbar = activity?.toolbar
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        toolbarTitle = activity?.tbTitle
-        toolbarTitle?.text = "Note"
-
-        spinner = activity?.spinner
-        spinnerVisible()
-    }
-
+    /*
     private fun spinnerListener() {
         spinner!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -138,65 +92,6 @@ class NoteDetailFragment : Fragment(R.layout.fragment_note_detail) {
             Toast.makeText(context, "No field can be empty", Toast.LENGTH_SHORT).show()
         }
     }
-
-    private fun setSpinnerPosition() {
-        Log.d(TAG, "setSpinnerPosition: incomingPriority = $incomingPriority")
-        if (incomingPriority == 0){
-            spinner?.setSelection(SPINNER_DEFAULT_VALUE)
-        }else{
-            spinner?.setSelection(incomingPriority - 1)
-        }
-    }
-
-    private fun goToMain(){
-        NavHelper.navigateWithoutStack(layout, R.id.action_noteRoomFragment_to_mainFragment2, null )
-    }
-
-    private fun hideKeyboard(){
-        try {
-            val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(requireView().windowToken, 0)
-        }catch (e : Exception){
-            e.printStackTrace()
-        }
-    }
-
-    //-------------------------------- override functions -----------------------------------------//
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.saveNote) {
-            if (isUpdating) {
-                Log.d(TAG, "onOptionsItemSelected: isUpdating == true")
-                updateNote()
-            } else {
-                Log.d(TAG, "onOptionsItemSelected: isUpdating == false ")
-                saveNote()
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    private fun spinnerVisible(){
-        spinner?.visibility = View.VISIBLE
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d(TAG, "onResume: called")
-        spinnerVisible()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d(TAG, "onPause: called")
-        toolbarTitle!!.text = getString(R.string.app_name)
-        spinner?.visibility = View.GONE
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
-    }*/
+    */
 
 }
