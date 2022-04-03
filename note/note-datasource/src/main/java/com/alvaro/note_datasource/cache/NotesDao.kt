@@ -16,4 +16,7 @@ interface NotesDao  {
 
     @Query("SELECT * FROM noteDb ORDER BY priority DESC, timeStamp DESC")
     fun getNotesByPriorityDesc() : List<NoteEntity>
+
+    @Query("SELECT * FROM noteDb WHERE id = :noteId")
+    fun getNoteById(noteId : Int) : NoteEntity
 }

@@ -4,9 +4,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import com.alvaro.note_domain.model.Note
 import com.alvaro.ui_note.R
 import com.alvaro.ui_note.databinding.FragmentNoteDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class NoteDetailFragment : Fragment(R.layout.fragment_note_detail) {
@@ -44,13 +47,31 @@ class NoteDetailFragment : Fragment(R.layout.fragment_note_detail) {
         binding = FragmentNoteDetailBinding.bind(view)
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
-        viewModel
        /* toolbar()
         spinnerListener()
         incomingBundle()
         setSpinnerPosition()
         noteTitle.setText(incomingTitle)
         noteContent.setText(incomingContent)*/
+        subscribeObservers()
+    }
+
+    private fun subscribeObservers() {
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.state.collect { state ->
+                println("${TAG} triggered ${state}")
+                state.note?.let { displayDetails(it) }
+            }
+        }
+
+    }
+
+    private fun displayDetails(note : Note){
+        binding.apply{
+            noteTitle.setText(note.title)
+            noteContent.setText(note.content)
+        }
     }
 
 

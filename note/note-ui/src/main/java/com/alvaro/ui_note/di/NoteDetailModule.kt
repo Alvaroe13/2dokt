@@ -1,6 +1,7 @@
 package com.alvaro.ui_note.di
 
 import com.alvaro.core.util.Logger
+import com.alvaro.note_domain.interactors.GetNoteById
 import com.alvaro.note_domain.interactors.InsertNote
 import com.alvaro.note_domain.repository.NoteRepository
 import dagger.Module
@@ -28,6 +29,12 @@ object NoteDetailModule {
     @Singleton
     fun provideInsertNoteInteractor(noteRepository: NoteRepository) : InsertNote {
         return InsertNote(noteRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetNoteByIdInteractor(noteRepository: NoteRepository) : GetNoteById {
+        return GetNoteById(noteRepository)
     }
 
 }

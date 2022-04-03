@@ -18,6 +18,7 @@ class NoteListFragment : Fragment(R.layout.fragment_note_list), NoteListAdapter.
 
     companion object {
         private const val TAG = "NoteListFragment"
+        const val NOTE_ID_KEY = "noteId"
     }
 
     private lateinit var binding: FragmentNoteListBinding
@@ -96,7 +97,8 @@ class NoteListFragment : Fragment(R.layout.fragment_note_list), NoteListAdapter.
     }*/
 
     override fun itemClick(noteId: Int) {
-        val bundle = bundleOf( "id" to noteId)
+        val bundle = bundleOf( NOTE_ID_KEY to noteId)
+        findNavController().navigate(R.id.action_NoteListFragment_to_noteDetailFragment, bundle)
     }
 
 }
