@@ -20,8 +20,10 @@ class NoteListAdapter(
         }
 
         override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {
-            return oldItem.content == newItem.content && oldItem.title == newItem.title
+            return oldItem.content == newItem.content
+                    && oldItem.title == newItem.title
                     && oldItem.timeStamp == newItem.timeStamp
+                    && oldItem.priority == newItem.priority
         }
     }
 
