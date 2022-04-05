@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = NotesDatabase.DATABASE_NAME)
 class NoteEntity(
     @PrimaryKey(autoGenerate = false)
-    var id: Int,
+    var id: String,
     var title: String = "",
     var content: String = "",
     var priority: Int = 0,

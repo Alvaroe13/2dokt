@@ -11,7 +11,7 @@ class GetNoteById(
     private val noteRepository: NoteRepository
 ) {
 
-    fun execute(noteId: Int): Flow<DataState<Note>> = flow{
+    fun execute(noteId: String): Flow<DataState<Note>> = flow{
 
         try {
             emit( DataState.Data( data = noteRepository.getNoteById(noteId)))

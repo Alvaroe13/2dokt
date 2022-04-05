@@ -2,7 +2,7 @@ package com.alvaro.note_domain.model
 
 
 data class Note(
-    var id: Int? = null,
+    var id: String? = null,
     var title: String,
     var content: String,
     var priority: Int,
@@ -11,11 +11,11 @@ data class Note(
 
     companion object Factory {
         fun emptyNote(): Note {
-            return Note(0, "Empty note", "This is an empty note", 0, "null")
+            return Note(null, "Empty note", "This is an empty note", 0, "null")
         }
 
         fun build(
-            id: Int?,
+            id: String?,
             title: String,
             content: String,
             priority: Int,

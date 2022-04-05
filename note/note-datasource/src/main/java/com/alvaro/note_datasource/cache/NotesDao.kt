@@ -18,5 +18,5 @@ interface NotesDao  {
     fun getNotesByPriorityDesc() : List<NoteEntity>
 
     @Query("SELECT * FROM noteDb WHERE id = :noteId")
-    fun getNoteById(noteId : Int) : NoteEntity
+    fun getNoteById(noteId : String) : NoteEntity
 }

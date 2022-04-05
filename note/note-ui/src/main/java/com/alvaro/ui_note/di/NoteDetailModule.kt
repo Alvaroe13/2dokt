@@ -28,8 +28,11 @@ object NoteDetailModule {
 
     @Provides
     @Singleton
-    fun provideInsertNoteInteractor(noteRepository: NoteRepository) : InsertNote {
-        return InsertNote(noteRepository)
+    fun provideInsertNoteInteractor(
+        noteRepository: NoteRepository,
+        timeStampGenerator: TimeStampGenerator
+    ) : InsertNote {
+        return InsertNote(noteRepository, timeStampGenerator)
     }
 
     @Provides

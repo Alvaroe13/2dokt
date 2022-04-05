@@ -69,7 +69,7 @@ class NoteListAdapter(
     }
 
     interface ClickHandler {
-        fun itemClick(noteId: Int)
+        fun itemClick(noteId: String)
     }
 
 }

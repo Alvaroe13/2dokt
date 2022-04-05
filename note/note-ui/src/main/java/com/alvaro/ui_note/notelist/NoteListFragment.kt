@@ -1,13 +1,16 @@
 package com.alvaro.ui_note.notelist
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.alvaro.core.domain.UIComponent
 import com.alvaro.ui_note.R
 import com.alvaro.ui_note.databinding.FragmentNoteListBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,11 +40,36 @@ class NoteListFragment : Fragment(R.layout.fragment_note_list), NoteListAdapter.
         subscribeObservers()
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (!viewModel.didScreenRotated){
+            forceRefresh()
+        }
+    }
+
+    private fun forceRefresh(){
+        viewModel.triggerEvent(NoteListEvents.GetNotes)
+    }
+
     private fun subscribeObservers() {
 
         lifecycleScope.launchWhenStarted {
+            viewModel.response.collect { value: UIComponent ->
+                when (value) {
+                    is UIComponent.Dialog -> {
+                        showDialog(value)
+                    }
+                    is UIComponent.Toast -> {
+                        showToast(value)
+                    }
+                    else -> {}
+                }
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
             viewModel.state.collect { state ->
-                println("${TAG} triggered ${state}")
+                //println("${TAG} triggered ${state}")
                 noteAdapter.differAsync.submitList(state.noteList)
             }
         }
@@ -62,14 +90,17 @@ class NoteListFragment : Fragment(R.layout.fragment_note_list), NoteListAdapter.
         }
     }
 
+    private fun showToast(uiComponent: UIComponent.Toast){
+        Toast.makeText(requireContext(), uiComponent.message, Toast.LENGTH_LONG).show()
+    }
 
-    /*private fun getAllNotes() {
-        viewModel.getAllNotes().observe(viewLifecycleOwner, Observer { response ->
-            noteList = response
-            println("MainFragment, response size -> = ${response.size}")
-            noteAdapter.differAsync.submitList(response)
-        })
-    }*/
+    private fun showDialog(uiComponent: UIComponent.Dialog){
+        val builder = AlertDialog.Builder(this.context)
+        builder.setTitle(uiComponent.title)
+        builder.setMessage(uiComponent.message)
+        builder.show()
+    }
+
 
     /*private fun deleteNote() {
 
@@ -96,9 +127,19 @@ class NoteListFragment : Fragment(R.layout.fragment_note_list), NoteListAdapter.
         swipeToDelete.attachToRecyclerView(recycler)
     }*/
 
-    override fun itemClick(noteId: Int) {
+    override fun itemClick(noteId: String) {
         val bundle = bundleOf( NOTE_ID_KEY to noteId)
         findNavController().navigate(R.id.action_NoteListFragment_to_noteDetailFragment, bundle)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        viewModel.didScreenRotated = true
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.didScreenRotated = false
     }
 
 }

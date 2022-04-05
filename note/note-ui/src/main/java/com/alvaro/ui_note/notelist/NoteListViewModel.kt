@@ -29,6 +29,8 @@ class NoteListViewModel @Inject constructor(
     val response: SharedFlow<UIComponent> get() = _response
     private val _response: MutableSharedFlow<UIComponent> = MutableSharedFlow()
 
+    var didScreenRotated = false
+
     init {
         triggerEvent(NoteListEvents.GetNotes)
     }

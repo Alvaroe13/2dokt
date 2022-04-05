@@ -27,7 +27,7 @@ class NoteRepositoryImpl (
         }
     }
 
-    override suspend fun getNoteById(noteId: Int): Note {
+    override suspend fun getNoteById(noteId: String): Note {
         return noteMapper.mapTo( database.getDao().getNoteById(noteId) )
     }
 

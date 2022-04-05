@@ -36,8 +36,8 @@ class NoteDetailViewModel @Inject constructor(
     private val _response: MutableSharedFlow<UIComponent> = MutableSharedFlow()
 
     init {
-        val noteId = savedStateHandle.get<Int>(NoteListFragment.NOTE_ID_KEY) ?: -1
-        if (noteId != -1){
+        val noteId = savedStateHandle.get<String>(NoteListFragment.NOTE_ID_KEY) ?: ""
+        if (noteId.isNotBlank()){
             triggerEvent(NoteDetailsEvents.GetNoteById(noteId))
         }
     }
@@ -91,7 +91,7 @@ class NoteDetailViewModel @Inject constructor(
 
     }
 
-    private fun getNoteById(noteId: Int) {
+    private fun getNoteById(noteId: String) {
         viewModelScope.launch(io) {
             getNoteById.execute(noteId).collect { dataState ->
                 withContext(main) {
