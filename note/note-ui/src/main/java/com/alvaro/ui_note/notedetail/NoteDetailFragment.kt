@@ -22,7 +22,7 @@ import javax.inject.Inject
 class NoteDetailFragment : Fragment(R.layout.fragment_note_detail) {
 
     companion object {
-        private const val TAG = "NoteRoomFragment"
+        private const val TAG = "NoteDetailFragment"
     }
 
     lateinit var binding: FragmentNoteDetailBinding
@@ -133,7 +133,7 @@ class NoteDetailFragment : Fragment(R.layout.fragment_note_detail) {
     }
 
     private fun showDialog(uiComponent: UIComponent.Dialog){
-        val builder = AlertDialog.Builder(this@NoteDetailFragment.context)
+        val builder = AlertDialog.Builder(this.context)
         builder.setTitle(uiComponent.title)
         builder.setMessage(uiComponent.message)
         builder.show()

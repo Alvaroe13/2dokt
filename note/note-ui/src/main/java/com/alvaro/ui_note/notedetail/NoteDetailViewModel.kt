@@ -9,6 +9,7 @@ import com.alvaro.core.domain.UIComponent
 import com.alvaro.core.util.Logger
 import com.alvaro.note_domain.interactors.notedetailview.GetNoteById
 import com.alvaro.note_domain.interactors.notedetailview.InsertNote
+import com.alvaro.note_domain.interactors.notedetailview.UpdateNote
 import com.alvaro.note_domain.model.Note
 import com.alvaro.ui_note.notelist.NoteListFragment
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,6 +24,7 @@ import javax.inject.Named
 class NoteDetailViewModel @Inject constructor(
     private val insertNote: InsertNote,
     private val getNoteById: GetNoteById,
+    private val updateNote: UpdateNote,
     @Named("NoteDetailView") private val logger: Logger,
     @Named("IO") private val io: CoroutineDispatcher,
     @Named("Main") private val main: CoroutineDispatcher,
@@ -51,6 +53,7 @@ class NoteDetailViewModel @Inject constructor(
                 insertNote(event.note)
             }
             is NoteDetailsEvents.UpdateNote -> {
+                updateNote(event.note)
             }
             is NoteDetailsEvents.GetNoteById -> {
                 getNoteById(event.noteId)
@@ -121,9 +124,34 @@ class NoteDetailViewModel @Inject constructor(
 
     }
 
-    /*fun updateNote(note: Note) = viewModelScope.launch {
-        repository.update(note)
-    }*/
+    private fun updateNote(note: Note) {
+        viewModelScope.launch(io) {
+            updateNote.execute(note, this).collect { dataState ->
+                withContext(main) {
+
+                    when (dataState) {
+                        is DataState.Data -> {
+                            _state.value = _state.value.copy(
+                                loadingState = LoadingState.Idle,
+                                saveNoteType = SaveNoteType.UpdateNote
+                            )
+                        }
+                        is DataState.Response -> {
+                            when (dataState.uiComponent) {
+                                is UIComponent.None -> {
+                                    logger.log((dataState.uiComponent as UIComponent.None).message)
+                                }
+                                else -> {
+                                    _response.emit(dataState.uiComponent)
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+    }
 
 
 }
