@@ -7,8 +7,8 @@ import com.alvaro.core.domain.DataState
 import com.alvaro.core.domain.LoadingState
 import com.alvaro.core.domain.UIComponent
 import com.alvaro.core.util.Logger
-import com.alvaro.note_domain.interactors.GetNoteById
-import com.alvaro.note_domain.interactors.InsertNote
+import com.alvaro.note_domain.interactors.notedetailview.GetNoteById
+import com.alvaro.note_domain.interactors.notedetailview.InsertNote
 import com.alvaro.note_domain.model.Note
 import com.alvaro.ui_note.notelist.NoteListFragment
 import dagger.hilt.android.lifecycle.HiltViewModel

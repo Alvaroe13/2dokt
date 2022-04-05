@@ -1,7 +1,8 @@
 package com.alvaro.ui_note.di
 
 import com.alvaro.core.util.Logger
-import com.alvaro.note_domain.interactors.GetNotes
+import com.alvaro.note_domain.interactors.notelistview.DeleteNote
+import com.alvaro.note_domain.interactors.notelistview.GetNotes
 import com.alvaro.note_domain.repository.NoteRepository
 import dagger.Module
 import dagger.Provides
@@ -28,5 +29,11 @@ object NoteListModule {
     @Singleton
     fun provideGetNotesInteractor(noteRepository: NoteRepository) : GetNotes {
         return GetNotes(noteRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDeleteNoteInteractor(noteRepository: NoteRepository): DeleteNote {
+        return DeleteNote(noteRepository)
     }
 }
