@@ -61,4 +61,12 @@ dependencies {
     implementation(Libs.viewModel)
     implementation(Libs.hilt)
     kapt(Libs.hilt_kapt)
+
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation "junit:junit:4.13"
+    androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.0"
 }
