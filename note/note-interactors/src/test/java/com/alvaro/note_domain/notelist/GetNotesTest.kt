@@ -1,11 +1,12 @@
-package com.alvaro.note_domain.interactors.notelistview
+package com.alvaro.note_domain.notelist
 
 import com.alvaro.core.domain.DataState
-import com.alvaro.note_domain.data.NoteDatabaseFake
-import com.alvaro.note_domain.data.NoteFactory
-import com.alvaro.note_domain.data.NoteRepositoryTestImpl
+import com.alvaro.note_datasource_test.data.NoteDatabaseFake
+import com.alvaro.note_datasource_test.data.NoteFactory
+import com.alvaro.note_datasource_test.data.NoteRepositoryTestImpl
 import com.alvaro.note_domain.model.Note
 import com.alvaro.note_domain.repository.NoteRepository
+import com.alvaro.note_interactors.notelist.GetNotes
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import org.junit.Test

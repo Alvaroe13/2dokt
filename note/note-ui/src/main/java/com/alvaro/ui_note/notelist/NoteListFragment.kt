@@ -7,7 +7,9 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +19,7 @@ import com.alvaro.ui_note.R
 import com.alvaro.ui_note.databinding.FragmentNoteListBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class NoteListFragment : Fragment(R.layout.fragment_note_list), NoteListAdapter.ClickHandler {
@@ -53,17 +56,18 @@ class NoteListFragment : Fragment(R.layout.fragment_note_list), NoteListAdapter.
     }
 
     private fun subscribeObservers() {
-
-        lifecycleScope.launchWhenStarted {
-            viewModel.response.collect { value: UIComponent ->
-                when (value) {
-                    is UIComponent.Dialog -> {
-                        showDialog(value)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.response.collect { value: UIComponent ->
+                    when (value) {
+                        is UIComponent.Dialog -> {
+                            showDialog(value)
+                        }
+                        is UIComponent.Toast -> {
+                            showToast(value)
+                        }
+                        else -> {}
                     }
-                    is UIComponent.Toast -> {
-                        showToast(value)
-                    }
-                    else -> {}
                 }
             }
         }

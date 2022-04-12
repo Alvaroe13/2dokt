@@ -1,9 +1,9 @@
 package com.alvaro.ui_note.di
 
 import com.alvaro.core.util.Logger
-import com.alvaro.note_domain.interactors.notelistview.DeleteNote
-import com.alvaro.note_domain.interactors.notelistview.GetNotes
 import com.alvaro.note_domain.repository.NoteRepository
+import com.alvaro.note_interactors.notelist.DeleteNote
+import com.alvaro.note_interactors.notelist.GetNotes
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

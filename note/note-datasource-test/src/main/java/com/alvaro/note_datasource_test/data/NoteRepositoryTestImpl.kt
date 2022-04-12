@@ -1,4 +1,4 @@
-package com.alvaro.note_domain.data
+package com.alvaro.note_datasource_test.data
 
 import com.alvaro.note_domain.model.Note
 import com.alvaro.note_domain.repository.NoteRepository
@@ -6,6 +6,7 @@ import com.alvaro.note_domain.repository.NoteRepository
 class NoteRepositoryTestImpl(
     private val notesDatabaseFake: NoteDatabaseFake
 ) : NoteRepository {
+
     override suspend fun insertNote(note: Note): Long {
         return notesDatabaseFake.insertNote(note)
     }
@@ -15,7 +16,7 @@ class NoteRepositoryTestImpl(
     }
 
     override suspend fun deleteNote(note: Note): Int {
-        return deleteNote(note)
+        return notesDatabaseFake.deleteNote(note)
     }
 
     override suspend fun getAllNotes(): List<Note> {

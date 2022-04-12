@@ -16,7 +16,9 @@
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/note" />
             <option value="$PROJECT_DIR$/note/note-datasource" />
+            <option value="$PROJECT_DIR$/note/note-datasource-test" />
             <option value="$PROJECT_DIR$/note/note-domain" />
+            <option value="$PROJECT_DIR$/note/note-interactors" />
             <option value="$PROJECT_DIR$/note/note-ui" />
           </set>
         </option>

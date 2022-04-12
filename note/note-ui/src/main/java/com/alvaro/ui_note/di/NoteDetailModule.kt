@@ -2,10 +2,10 @@ package com.alvaro.ui_note.di
 
 import com.alvaro.core.util.Logger
 import com.alvaro.core.util.TimeStampGenerator
-import com.alvaro.note_domain.interactors.notedetailview.GetNoteById
-import com.alvaro.note_domain.interactors.notedetailview.InsertNote
-import com.alvaro.note_domain.interactors.notedetailview.UpdateNote
 import com.alvaro.note_domain.repository.NoteRepository
+import com.alvaro.note_interactors.notedetail.GetNoteById
+import com.alvaro.note_interactors.notedetail.InsertNote
+import com.alvaro.note_interactors.notedetail.UpdateNote
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,7 +33,10 @@ object NoteDetailModule {
         noteRepository: NoteRepository,
         timeStampGenerator: TimeStampGenerator
     ) : InsertNote {
-        return InsertNote(noteRepository, timeStampGenerator)
+        return InsertNote(
+            noteRepository,
+            timeStampGenerator
+        )
     }
 
     @Provides

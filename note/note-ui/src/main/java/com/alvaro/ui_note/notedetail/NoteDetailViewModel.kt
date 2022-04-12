@@ -6,14 +6,14 @@ import androidx.lifecycle.viewModelScope
 import com.alvaro.core.domain.DataState
 import com.alvaro.core.domain.LoadingState
 import com.alvaro.core.domain.UIComponent
+import com.alvaro.core.util.DispatcherProvider
 import com.alvaro.core.util.Logger
-import com.alvaro.note_domain.interactors.notedetailview.GetNoteById
-import com.alvaro.note_domain.interactors.notedetailview.InsertNote
-import com.alvaro.note_domain.interactors.notedetailview.UpdateNote
 import com.alvaro.note_domain.model.Note
+import com.alvaro.note_interactors.notedetail.GetNoteById
+import com.alvaro.note_interactors.notedetail.InsertNote
+import com.alvaro.note_interactors.notedetail.UpdateNote
 import com.alvaro.ui_note.notelist.NoteListFragment
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -26,8 +26,7 @@ class NoteDetailViewModel @Inject constructor(
     private val getNoteById: GetNoteById,
     private val updateNote: UpdateNote,
     @Named("NoteDetailView") private val logger: Logger,
-    @Named("IO") private val io: CoroutineDispatcher,
-    @Named("Main") private val main: CoroutineDispatcher,
+    private val dispatcherProvider: DispatcherProvider,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -63,9 +62,9 @@ class NoteDetailViewModel @Inject constructor(
 
     private fun insertNote(note: Note) {
 
-        viewModelScope.launch(io) {
+        viewModelScope.launch(dispatcherProvider.io()) {
             insertNote.execute(note).collect { dataState ->
-                withContext(main) {
+                withContext(dispatcherProvider.main()) {
 
                     when (dataState) {
                         is DataState.Data -> {
@@ -95,9 +94,9 @@ class NoteDetailViewModel @Inject constructor(
     }
 
     private fun getNoteById(noteId: String) {
-        viewModelScope.launch(io) {
+        viewModelScope.launch(dispatcherProvider.io()) {
             getNoteById.execute(noteId).collect { dataState ->
-                withContext(main) {
+                withContext(dispatcherProvider.main()) {
 
                     when (dataState) {
                         is DataState.Data -> {
@@ -125,9 +124,9 @@ class NoteDetailViewModel @Inject constructor(
     }
 
     private fun updateNote(note: Note) {
-        viewModelScope.launch(io) {
+        viewModelScope.launch(dispatcherProvider.io()) {
             updateNote.execute(note, this).collect { dataState ->
-                withContext(main) {
+                withContext(dispatcherProvider.main()) {
 
                     when (dataState) {
                         is DataState.Data -> {

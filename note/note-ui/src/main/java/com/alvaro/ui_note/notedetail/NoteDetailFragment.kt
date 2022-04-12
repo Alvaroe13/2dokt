@@ -7,7 +7,9 @@ import android.widget.AdapterView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.alvaro.core.domain.UIComponent
 import com.alvaro.core.util.TimeStampGenerator
@@ -16,6 +18,7 @@ import com.alvaro.ui_note.R
 import com.alvaro.ui_note.databinding.FragmentNoteDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -57,28 +60,31 @@ class NoteDetailFragment : Fragment(R.layout.fragment_note_detail) {
 
     private fun subscribeObservers() {
 
-        lifecycleScope.launchWhenStarted {
-            viewModel.response.collect { value: UIComponent ->
-                when (value) {
-                    is UIComponent.Dialog -> {
-                        showDialog(value)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.response.collect { value: UIComponent ->
+                    when (value) {
+                        is UIComponent.Dialog -> {
+                            showDialog(value)
+                        }
+                        is UIComponent.Toast -> {
+                            showToast(value)
+                        }
+                        else -> {}
                     }
-                    is UIComponent.Toast -> {
-                      showToast(value)
-                    }
-                    else -> {}
                 }
             }
         }
 
-        lifecycleScope.launchWhenStarted {
-            viewModel.state.collect { state: NoteDetailState ->
-                popBackStack(state)
-                showDetails(state)
-                println("${TAG} triggered ${state}")
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.state.collect { state: NoteDetailState ->
+                    popBackStack(state)
+                    showDetails(state)
+                    println("${TAG} triggered ${state}")
+                }
             }
         }
-
     }
 
     private fun popBackStack(state: NoteDetailState){

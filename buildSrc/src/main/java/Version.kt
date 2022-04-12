@@ -11,6 +11,10 @@ object Version {
     const val jUnit = "4.12"
     const val material_design = "1.3.0-alpha01"
     const val hilt = "2.41"
+    const val core_testing = "2.1.0"
+    const val jUnit_androidx_ext = "1.1.3"
+    const val coroutines_test = "1.5.0"
+    const val mockito_kotlin = "4.3.1"
 
     //build
     const val kotlin = "1.5.30"

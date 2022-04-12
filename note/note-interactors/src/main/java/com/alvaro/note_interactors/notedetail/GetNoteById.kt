@@ -1,4 +1,4 @@
-package com.alvaro.note_domain.interactors.notedetailview
+package com.alvaro.note_interactors.notedetail
 
 import com.alvaro.core.domain.DataState
 import com.alvaro.core.domain.UIComponent

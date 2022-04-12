@@ -1,12 +1,11 @@
 package com.example.notes.di
 
+import com.alvaro.core.util.DispatcherProvider
+import com.alvaro.core.util.DispatcherProviderImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -15,16 +14,8 @@ object CoroutineDispatchersModule {
 
     @Provides
     @Singleton
-    @Named("IO")
-    fun provideDispatcherIO() : CoroutineDispatcher {
-        return Dispatchers.IO
-    }
-
-    @Provides
-    @Singleton
-    @Named("Main")
-    fun provideDispatcherMain() : CoroutineDispatcher {
-        return Dispatchers.IO
+    fun provideDispatcherProvider() : DispatcherProvider {
+        return DispatcherProviderImpl()
     }
 
 }

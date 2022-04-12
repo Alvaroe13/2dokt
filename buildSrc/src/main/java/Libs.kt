@@ -4,7 +4,6 @@ object Libs {
     const val androidCore = "androidx.core:core-ktx:${Version.android_core}"
     const val appCompat = "androidx.appcompat:appcompat:${Version.app_compat}"
     const val constraintLayout = "androidx.constraintlayout:constraintlayout:${Version.constraint_layout}"
-    const val jUnit = "junit:junit:${Version.jUnit}"
 
     // Material Design
     const val materialDesign = "com.google.android.material:material:${Version.material_design}"
@@ -32,4 +31,12 @@ object Libs {
     //hilt
     const val hilt = "com.google.dagger:hilt-android:${Version.hilt}"
     const val hilt_kapt= "com.google.dagger:hilt-android-compiler:${Version.hilt}"
+
+    //testing
+    const val jUnit = "junit:junit:${Version.jUnit}"
+    const val jUnit_androidx_ext = "androidx.test.ext:junit:${Version.jUnit_androidx_ext}"
+    const val core_testing = "androidx.arch.core:core-testing:${Version.core_testing}"
+    const val coroutines_test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Version.coroutines_test}"
+    const val mockito_core = "org.mockito:mockito-core:${Version.mockito_kotlin}"
+
 }

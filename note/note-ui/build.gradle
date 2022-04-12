@@ -48,6 +48,8 @@ dependencies {
 
     implementation project(':core')
     implementation project(':note:note-domain')
+    implementation project(':note:note-interactors')
+    implementation project(':note:note-datasource-test')
 
     implementation(Libs.ktx_standard_lib)
     implementation(Libs.androidCore)
@@ -62,11 +64,9 @@ dependencies {
     implementation(Libs.hilt)
     kapt(Libs.hilt_kapt)
 
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    androidTestImplementation "junit:junit:4.13"
-    androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.0"
+    testImplementation(Libs.jUnit)
+    testImplementation(Libs.core_testing)
+    testImplementation(Libs.jUnit_androidx_ext)
+    testImplementation(Libs.coroutines_test)
+    testImplementation(Libs.mockito_core)
 }
