@@ -14,7 +14,8 @@ object Version {
     const val core_testing = "2.1.0"
     const val jUnit_androidx_ext = "1.1.3"
     const val coroutines_test = "1.5.0"
-    const val mockito_kotlin = "4.3.1"
+    const val mockito = "4.3.1"
+    const val turbine = "0.7.0"
 
     //build
     const val kotlin = "1.5.30"

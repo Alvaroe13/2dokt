@@ -21,8 +21,8 @@ import javax.inject.Named
 class NoteListViewModel @Inject constructor(
     private val getNotes: GetNotes,
     private val deleteNote: DeleteNote,
+    private val dispatcherProvider: DispatcherProvider,
     @Named("NoteListView") private val logger: Logger,
-    private val dispatcherProvider: DispatcherProvider
 ) : ViewModel() {
 
     val state: StateFlow<NoteListState> get() = _state

@@ -1,8 +1,7 @@
 package com.alvaro.ui_note.notelistview
 
+import app.cash.turbine.test
 import com.alvaro.core.domain.LoadingState
-import com.alvaro.core.util.DispatcherProvider
-import com.alvaro.core.util.DispatcherProviderImpl
 import com.alvaro.core.util.Logger
 import com.alvaro.note_datasource_test.data.NoteDatabaseFake
 import com.alvaro.note_datasource_test.data.NoteFactory
@@ -11,17 +10,16 @@ import com.alvaro.note_domain.repository.NoteRepository
 import com.alvaro.note_interactors.notelist.DeleteNote
 import com.alvaro.note_interactors.notelist.GetNotes
 import com.alvaro.ui_note.notelist.NoteListEvents
-import com.alvaro.ui_note.notelist.NoteListState
 import com.alvaro.ui_note.notelist.NoteListViewModel
+import com.alvaro.ui_note.util.DispatcherProviderTestImpl
 import com.alvaro.ui_note.util.MainCoroutineRule
+import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -31,46 +29,17 @@ class NoteListViewModelTest {
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-
     private lateinit var viewModel: NoteListViewModel
 
-    /*@Mock
     private lateinit var getNotes: GetNotes
-    @Mock
     private lateinit var deleteNote: DeleteNote
-    @Mock
-    private lateinit var dispatcherProvider: DispatcherProvider
-    @Mock
+    private lateinit var dispatcherProvider: DispatcherProviderTestImpl
     private lateinit var logger: Logger
-    @Mock
-    private lateinit var noteFactory: NoteFactory
-    @Mock
-    private lateinit var database: NoteDatabaseFake
-    @Mock
-    private lateinit var noteRepository: NoteRepository*/
-
     private lateinit var noteFactory: NoteFactory
     private lateinit var database: NoteDatabaseFake
     private lateinit var noteRepository: NoteRepository
-    private lateinit var getNotes: GetNotes
-    private lateinit var deleteNote: DeleteNote
-    private lateinit var dispatcherProvider: DispatcherProvider
-    private lateinit var logger: Logger
 
-    @Before
-    fun setup() {
-        noteFactory = NoteFactory()
-        database = NoteDatabaseFake(noteFactory)
-        noteRepository = NoteRepositoryTestImpl(database)
-        getNotes = GetNotes(noteRepository)
-        deleteNote = DeleteNote(noteRepository)
-        logger = Logger("NoteListViewModelTest" , true)
-        dispatcherProvider = DispatcherProviderImpl()
-
-        viewModel = NoteListViewModel(getNotes, deleteNote, logger, dispatcherProvider)
-    }
-
-    @Test
+    /*@Test
     fun `get notes success`() = runBlockingTest {
 
         assert(database.notesDatabase.isEmpty())
@@ -98,7 +67,7 @@ class NoteListViewModelTest {
         //assert(states[0].loadingState.equals(false))
 
         job.cancel()
-    }
+    }*/
 
     /*@Test
     fun `get notes success`() = runBlockingTest {
@@ -127,6 +96,33 @@ class NoteListViewModelTest {
 
         job.cancel()
     }*/
+
+    @Test
+    fun `collect with eager strategy`() = runBlockingTest {
+
+        noteFactory = NoteFactory()
+        database = NoteDatabaseFake(noteFactory)
+        noteRepository = NoteRepositoryTestImpl(database)
+        getNotes = GetNotes(noteRepository)
+        deleteNote = DeleteNote(noteRepository)
+        logger = Logger("NoteListViewModelTest", true)
+        dispatcherProvider = DispatcherProviderTestImpl()
+
+        viewModel = NoteListViewModel(getNotes, deleteNote, dispatcherProvider, logger)
+
+        viewModel.state.test {
+            /*assertEquals("one", awaitItem())
+            assertEquals("two", awaitItem())*/
+            viewModel.triggerEvent(NoteListEvents.GetNotes)
+            assertTrue(awaitItem().loadingState is LoadingState.Idle)
+            assertTrue(awaitItem().loadingState is LoadingState.Loading)
+            assertTrue(awaitItem().loadingState is LoadingState.Idle)
+            //assertTrue(awaitItem().noteList != null )
+            awaitComplete()
+        }
+
+
+    }
 
 
 }

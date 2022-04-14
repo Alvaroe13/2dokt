@@ -35,7 +35,9 @@ class NoteDatabaseFake(
     }
 
     override suspend fun deleteNote(note: Note): Int {
-        notesDatabase.removeIf { it.id == note.id }
+        val wasDeleted = notesDatabase.removeIf { it.id == note.id }
+        if (wasDeleted.not())
+            throw NullPointerException("Note provided is not in database")
         return -1
     }
 
@@ -48,7 +50,7 @@ class NoteDatabaseFake(
             ?: throw NullPointerException("Note not found in db with id ${noteId}")
     }
 
-    //not part of repo
+    //for test only
     fun addNote(){
         notesDatabase.add(noteFactory.buildNote())
     }

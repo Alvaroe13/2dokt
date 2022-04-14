@@ -18,19 +18,24 @@ class DeleteNote(private val noteRepository: NoteRepository) {
     ): Flow<DataState<List<Note>>> = flow {
 
 
-        try {
-            scope.async {
+        val result = scope.async {
+            try {
                 noteRepository.deleteNote(note)
-            }.await()
-        } catch (e: Exception) {
+            } catch (e: Exception) {
+                e
+            }
+        }.await()
+
+        if (result is Exception){
             emit(
                 DataState.Response(
                     uiComponent = UIComponent.Toast(
-                        message = "Error deleting notes from cache"
+                        message = ERROR_DELETING_NOTE
                     )
                 )
             )
         }
+
 
         try {
             val notes = noteRepository.getAllNotes()
@@ -46,6 +51,10 @@ class DeleteNote(private val noteRepository: NoteRepository) {
             )
         }
 
+    }
+
+    companion object {
+        const val ERROR_DELETING_NOTE = "Error deleting note from cache"
     }
 
 }

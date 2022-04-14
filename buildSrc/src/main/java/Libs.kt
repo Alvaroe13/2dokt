@@ -37,6 +37,8 @@ object Libs {
     const val jUnit_androidx_ext = "androidx.test.ext:junit:${Version.jUnit_androidx_ext}"
     const val core_testing = "androidx.arch.core:core-testing:${Version.core_testing}"
     const val coroutines_test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Version.coroutines_test}"
-    const val mockito_core = "org.mockito:mockito-core:${Version.mockito_kotlin}"
+    const val mockito_core = "org.mockito:mockito-core:${Version.mockito}"
+    const val mockito_inline = "org.mockito:mockito-inline:${Version.mockito}"
+    const val turbine = "app.cash.turbine:turbine:${Version.turbine}"
 
 }

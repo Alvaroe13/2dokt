@@ -69,4 +69,6 @@ dependencies {
     testImplementation(Libs.jUnit_androidx_ext)
     testImplementation(Libs.coroutines_test)
     testImplementation(Libs.mockito_core)
+    testImplementation(Libs.mockito_inline)
+    testImplementation(Libs.turbine)
 }
