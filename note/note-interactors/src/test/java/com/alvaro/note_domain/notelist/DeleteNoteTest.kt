@@ -5,7 +5,6 @@ import com.alvaro.core.domain.UIComponent
 import com.alvaro.note_datasource_test.data.NoteDatabaseFake
 import com.alvaro.note_datasource_test.data.NoteFactory
 import com.alvaro.note_datasource_test.data.NoteRepositoryTestImpl
-import com.alvaro.note_domain.model.Note
 import com.alvaro.note_domain.repository.NoteRepository
 import com.alvaro.note_interactors.notelist.DeleteNote
 import kotlinx.coroutines.flow.toList
@@ -42,12 +41,11 @@ class DeleteNoteTest {
 
         //execution
         val note = noteDatabaseFake.notesDatabase[0]
-        val emissions = deleteNote.execute(note, this).toList()
+        val emissions = deleteNote.execute(note).toList()
 
         //assertion
         assert(emissions[0] is DataState.Data)
-        val notesRemaining: List<Note> = (emissions[0] as DataState.Data<List<Note>>).data!!
-        assert(!notesRemaining.contains(note))
+        assert(!noteDatabaseFake.notesDatabase.contains(note))
 
     }
 
@@ -61,7 +59,7 @@ class DeleteNoteTest {
 
         //execution
         val note = noteFactory.buildNote()
-        val emissions = deleteNote.execute(note, this).toList()
+        val emissions = deleteNote.execute(note, forceExceptionForTesting = true).toList()
 
         //assertion
         assert(emissions[0] is DataState.Response)

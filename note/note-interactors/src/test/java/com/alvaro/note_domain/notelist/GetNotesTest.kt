@@ -1,7 +1,9 @@
 package com.alvaro.note_domain.notelist
 
 import com.alvaro.core.domain.DataState
+import com.alvaro.core.domain.UIComponent
 import com.alvaro.note_datasource_test.data.NoteDatabaseFake
+import com.alvaro.note_datasource_test.data.NoteDatabaseFake.Companion.EXCEPTION_MESSAGE
 import com.alvaro.note_datasource_test.data.NoteFactory
 import com.alvaro.note_datasource_test.data.NoteRepositoryTestImpl
 import com.alvaro.note_domain.model.Note
@@ -52,6 +54,22 @@ class GetNotesTest {
         notes.forEachIndexed { index, note ->
             assert(note.id == noteDatabaseFake.notesDatabase[index].id)
         }
+    }
+
+    @Test
+    fun `get All Notes handle exception`() = runBlocking {
+
+        val noteDatabaseFake = NoteDatabaseFake(NoteFactory())
+        val noteRepository = NoteRepositoryTestImpl(noteDatabaseFake)
+        getNotes = GetNotes(noteRepository)
+
+        val emissions = getNotes.execute(forceExceptionForTesting = true).toList()
+        assert(emissions.size == 1)
+        assert(emissions[0] is DataState.Response)
+
+        val uiComponent = (emissions[0] as DataState.Response).uiComponent
+        assert( uiComponent is UIComponent.Dialog )
+        assert( (uiComponent as UIComponent.Dialog).message == EXCEPTION_MESSAGE )
     }
 
 }

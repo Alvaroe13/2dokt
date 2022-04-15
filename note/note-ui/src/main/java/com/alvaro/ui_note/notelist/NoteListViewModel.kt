@@ -86,24 +86,19 @@ class NoteListViewModel @Inject constructor(
     private fun deleteNote(note: Note){
         viewModelScope.launch(dispatcherProvider.io()) {
 
-            deleteNote.execute(note, this).collect { dataState ->
+            deleteNote.execute(note).collect { dataState ->
 
-                withContext(dispatcherProvider.main()){
-                    when (dataState) {
-                        is DataState.Data -> {
-                            _state.value = _state.value.copy(
-                                noteList = dataState.data,
-                                loadingState = LoadingState.Idle
-                            )
-                        }
-                        is DataState.Response -> {
-                            when (dataState.uiComponent) {
-                                is UIComponent.None -> {
-                                    logger.log((dataState.uiComponent as UIComponent.None).message)
-                                }
-                                else -> {
-                                    _response.emit(dataState.uiComponent)
-                                }
+                when (dataState) {
+                    is DataState.Data -> {
+                        triggerEvent(NoteListEvents.GetNotes)
+                    }
+                    is DataState.Response -> {
+                        when (dataState.uiComponent) {
+                            is UIComponent.None -> {
+                                logger.log((dataState.uiComponent as UIComponent.None).message)
+                            }
+                            else -> {
+                                _response.emit(dataState.uiComponent)
                             }
                         }
                     }

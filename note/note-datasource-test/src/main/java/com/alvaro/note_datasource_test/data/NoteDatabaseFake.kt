@@ -9,7 +9,8 @@ class NoteDatabaseFake(
 
     val notesDatabase: MutableList<Note> = mutableListOf()
 
-    override suspend fun insertNote(note: Note): Long {
+    override suspend fun insertNote(note: Note, forceExceptionForTesting: Boolean): Long {
+        if (forceExceptionForTesting) forceException()
         notesDatabase.forEach {
             if (it.id == note.id) {
                 notesDatabase.remove(it)
@@ -19,33 +20,31 @@ class NoteDatabaseFake(
         return -1
     }
 
-    override suspend fun updateNote(note: Note): Int {
-        var wasNoteFound = false
+    override suspend fun updateNote(note: Note, forceExceptionForTesting: Boolean): Int {
+        if (forceExceptionForTesting) forceException()
         notesDatabase.forEach {
             if (it.id == note.id) {
                 notesDatabase.remove(it)
-                wasNoteFound = true
             }
         }
-        if (wasNoteFound.not())
-            throw NullPointerException("Updating note failed since it can't be updated a note that doesn't exist in database")
 
         notesDatabase.add(note)
         return -1
     }
 
-    override suspend fun deleteNote(note: Note): Int {
-        val wasDeleted = notesDatabase.removeIf { it.id == note.id }
-        if (wasDeleted.not())
-            throw NullPointerException("Note provided is not in database")
+    override suspend fun deleteNote(note: Note, forceExceptionForTesting: Boolean): Int {
+        if (forceExceptionForTesting) forceException()
+         notesDatabase.removeIf { it.id == note.id }
         return -1
     }
 
-    override suspend fun getAllNotes(): List<Note> {
+    override suspend fun getAllNotes(forceExceptionForTesting: Boolean): List<Note> {
+        if (forceExceptionForTesting) forceException()
         return notesDatabase.toList()
     }
 
-    override suspend fun getNoteById(noteId: String): Note {
+    override suspend fun getNoteById(noteId: String, forceExceptionForTesting: Boolean): Note {
+        if (forceExceptionForTesting) forceException()
         return notesDatabase.find { it.id == noteId }
             ?: throw NullPointerException("Note not found in db with id ${noteId}")
     }
@@ -59,6 +58,14 @@ class NoteDatabaseFake(
         noteFactory.buildNotes().forEach {
             notesDatabase.add(noteFactory.buildNote())
         }
+    }
+
+    private fun forceException() {
+        throw Exception(EXCEPTION_MESSAGE)
+    }
+
+    companion object{
+        const val EXCEPTION_MESSAGE = "Error for testing has been triggered"
     }
 
 

@@ -7,23 +7,23 @@ class NoteRepositoryTestImpl(
     private val notesDatabaseFake: NoteDatabaseFake
 ) : NoteRepository {
 
-    override suspend fun insertNote(note: Note): Long {
-        return notesDatabaseFake.insertNote(note)
+    override suspend fun insertNote(note: Note, forceExceptionForTesting: Boolean): Long {
+        return notesDatabaseFake.insertNote(note, forceExceptionForTesting)
     }
 
-    override suspend fun updateNote(note: Note): Int {
-        return notesDatabaseFake.updateNote(note)
+    override suspend fun updateNote(note: Note, forceExceptionForTesting: Boolean): Int {
+        return notesDatabaseFake.updateNote(note, forceExceptionForTesting)
     }
 
-    override suspend fun deleteNote(note: Note): Int {
-        return notesDatabaseFake.deleteNote(note)
+    override suspend fun deleteNote(note: Note, forceExceptionForTesting: Boolean): Int {
+        return notesDatabaseFake.deleteNote(note, forceExceptionForTesting)
     }
 
-    override suspend fun getAllNotes(): List<Note> {
-       return notesDatabaseFake.getAllNotes()
+    override suspend fun getAllNotes(forceExceptionForTesting: Boolean): List<Note> {
+        return notesDatabaseFake.getAllNotes(forceExceptionForTesting)
     }
 
-    override suspend fun getNoteById(noteId: String): Note {
-        return notesDatabaseFake.getNoteById(noteId)
+    override suspend fun getNoteById(noteId: String, forceExceptionForTesting: Boolean): Note {
+        return notesDatabaseFake.getNoteById(noteId, forceExceptionForTesting)
     }
 }

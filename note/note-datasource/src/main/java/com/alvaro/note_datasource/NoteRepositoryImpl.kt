@@ -9,25 +9,25 @@ class NoteRepositoryImpl (
     private val noteMapper: NoteMapper
 ) : NoteRepository {
 
-    override suspend fun insertNote(note : Note) : Long {
+    override suspend fun insertNote(note : Note, forceExceptionForTesting: Boolean) : Long {
         return database.getDao().insertNote(noteMapper.mapFrom(note))
     }
 
-    override suspend fun updateNote(note: Note): Int {
+    override suspend fun updateNote(note: Note, forceExceptionForTesting: Boolean): Int {
         return database.getDao().updateNote(noteMapper.mapFrom(note))
     }
 
-    override suspend fun deleteNote(note: Note) : Int {
+    override suspend fun deleteNote(note: Note, forceExceptionForTesting: Boolean) : Int {
         return database.getDao().deleteNote(noteMapper.mapFrom(note))
     }
 
-    override suspend fun getAllNotes(): List<Note> {
+    override suspend fun getAllNotes(forceExceptionForTesting: Boolean): List<Note> {
         return database.getDao().getNotesByPriorityDesc().map {
             noteMapper.mapTo(it)
         }
     }
 
-    override suspend fun getNoteById(noteId: String): Note {
+    override suspend fun getNoteById(noteId: String, forceExceptionForTesting: Boolean): Note {
         return noteMapper.mapTo( database.getDao().getNoteById(noteId) )
     }
 

@@ -11,11 +11,13 @@ class GetNotes(
     private val noteRepository: NoteRepository
 ) {
 
-    fun execute(): Flow<DataState<List<Note>>> = flow {
+    fun execute(
+        forceExceptionForTesting: Boolean = false
+    ): Flow<DataState<List<Note>>> = flow {
 
         try {
-            val notes = noteRepository.getAllNotes()
-            emit(DataState.Data(data = notes ))
+            val notes = noteRepository.getAllNotes(forceExceptionForTesting)
+            emit(DataState.Data(data = notes))
         } catch (e: Exception) {
             emit(
                 DataState.Response(
