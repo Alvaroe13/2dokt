@@ -26,7 +26,7 @@ class InsertNoteTest {
     @Before
     fun setup() {
         noteFactory = NoteFactory()
-        noteDatabaseFake = NoteDatabaseFake(NoteFactory())
+        noteDatabaseFake = NoteDatabaseFake(noteFactory)
         noteRepository = NoteRepositoryTestImpl(noteDatabaseFake)
         timeStampGenerator = TimeStampGenerator()
 

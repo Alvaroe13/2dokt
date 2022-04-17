@@ -22,12 +22,8 @@ class NoteDatabaseFake(
 
     override suspend fun updateNote(note: Note, forceExceptionForTesting: Boolean): Int {
         if (forceExceptionForTesting) forceException()
-        notesDatabase.forEach {
-            if (it.id == note.id) {
-                notesDatabase.remove(it)
-            }
-        }
 
+        notesDatabase.removeIf { it.id == note.id }
         notesDatabase.add(note)
         return -1
     }

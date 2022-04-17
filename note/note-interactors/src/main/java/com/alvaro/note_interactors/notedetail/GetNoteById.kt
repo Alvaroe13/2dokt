@@ -14,7 +14,6 @@ class GetNoteById(
     fun execute(
         noteId: String,
         forceExceptionForTesting: Boolean = false
-
     ): Flow<DataState<Note>> = flow{
 
         try {

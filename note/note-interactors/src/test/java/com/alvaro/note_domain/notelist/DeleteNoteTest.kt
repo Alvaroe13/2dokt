@@ -25,7 +25,7 @@ class DeleteNoteTest {
     @Before
     fun setup() {
         noteFactory = NoteFactory()
-        noteDatabaseFake = NoteDatabaseFake(NoteFactory())
+        noteDatabaseFake = NoteDatabaseFake(noteFactory)
         noteRepository = NoteRepositoryTestImpl(noteDatabaseFake)
 
         deleteNote = DeleteNote(noteRepository)

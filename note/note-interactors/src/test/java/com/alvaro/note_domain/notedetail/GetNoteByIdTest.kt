@@ -24,7 +24,7 @@ class GetNoteByIdTest {
     @Before
     fun setup() {
         noteFactory = NoteFactory()
-        noteDatabaseFake = NoteDatabaseFake(NoteFactory())
+        noteDatabaseFake = NoteDatabaseFake(noteFactory)
         noteRepository = NoteRepositoryTestImpl(noteDatabaseFake)
 
         getNoteById = GetNoteById(noteRepository)
