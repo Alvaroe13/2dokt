@@ -11,7 +11,7 @@ data class Note(
 
     companion object Factory {
         fun emptyNote(): Note {
-            return Note(null, "Empty note", "This is an empty note", 0, "null")
+            return Note(null, "", "", 0, "")
         }
 
         fun build(

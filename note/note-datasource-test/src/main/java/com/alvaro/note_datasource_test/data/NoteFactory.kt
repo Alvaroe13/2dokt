@@ -24,4 +24,24 @@ class NoteFactory {
             buildNote()
         )
     }
+
+    fun buildNoteWithEmptyTitle(): Note {
+        return Note(
+            id = UUID.randomUUID().toString(),
+            title = "",
+            content = "This is some content",
+            priority = (0 until 5).random(),
+            timeStamp = UUID.randomUUID().toString()
+        )
+    }
+
+    fun buildNoteWithEmptyContent(): Note {
+        return Note(
+            id = UUID.randomUUID().toString(),
+            title = "This is some title",
+            content = "",
+            priority = (0 until 5).random(),
+            timeStamp = UUID.randomUUID().toString()
+        )
+    }
 }

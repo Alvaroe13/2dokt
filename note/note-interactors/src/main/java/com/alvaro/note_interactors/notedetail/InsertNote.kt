@@ -11,15 +11,18 @@ import kotlinx.coroutines.flow.flow
 class InsertNote(
     private val noteRepository: NoteRepository,
     private val timeStampGenerator: TimeStampGenerator
-    ) {
+) {
 
-    fun execute(note: Note): Flow<DataState<Long>> = flow {
+    fun execute(
+        note: Note,
+        forceExceptionForTesting: Boolean = false
+    ): Flow<DataState<Long>> = flow {
 
         if (!isValid(note)) {
             emit(
                 DataState.Response(
                     uiComponent = UIComponent.Toast(
-                        message = "Title and content must be not blank"
+                        message = ERROR_MSG_NO_VALID
                     )
                 )
             )
@@ -29,10 +32,10 @@ class InsertNote(
         note.timeStamp = timeStampGenerator.getDate() ?: "-"
 
         try {
-            emit(DataState.Data(data = noteRepository.insertNote(note)))
+            emit(DataState.Data(data = noteRepository.insertNote(note, forceExceptionForTesting)))
             emit(
                 DataState.Response(
-                    uiComponent = UIComponent.Toast(message = "Note saved successfully")
+                    uiComponent = UIComponent.Toast(message = SUCCESS_INSERTION_MSG)
                 )
             )
         } catch (e: Exception) {
@@ -40,7 +43,7 @@ class InsertNote(
                 DataState.Response(
                     uiComponent = UIComponent.Dialog(
                         title = "Database Error",
-                        message = e.message ?: "Unknown error"
+                        message = ERROR_MSG_UNKNOWN
                     )
                 )
             )
@@ -50,5 +53,11 @@ class InsertNote(
 
     private fun isValid(note: Note): Boolean {
         return note.title.isNotBlank() && note.content.isNotBlank()
+    }
+
+    companion object {
+        const val ERROR_MSG_NO_VALID = "Title and content must be not blank"
+        const val ERROR_MSG_UNKNOWN = "Error inserting note"
+        const val SUCCESS_INSERTION_MSG = "Note saved successfully"
     }
 }
