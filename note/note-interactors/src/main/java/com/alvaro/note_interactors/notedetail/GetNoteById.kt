@@ -11,18 +11,26 @@ class GetNoteById(
     private val noteRepository: NoteRepository
 ) {
 
-    fun execute(noteId: String): Flow<DataState<Note>> = flow{
+    fun execute(
+        noteId: String,
+        forceExceptionForTesting: Boolean = false
+
+    ): Flow<DataState<Note>> = flow{
 
         try {
-            emit( DataState.Data( data = noteRepository.getNoteById(noteId)))
+            emit( DataState.Data( data = noteRepository.getNoteById(noteId, forceExceptionForTesting)))
         }catch (e :Exception){
             emit(
                 DataState.Response(
                     uiComponent = UIComponent.Toast(
-                        message = e.localizedMessage ?: "Error retrieving notes from cache"
+                        message = ERROR_MSG
                     )
                 )
             )
         }
+    }
+
+    companion object{
+        const val ERROR_MSG = "Error retrieving notes from cache"
     }
 }
