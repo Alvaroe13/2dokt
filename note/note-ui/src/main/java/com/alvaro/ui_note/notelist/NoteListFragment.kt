@@ -72,13 +72,13 @@ class NoteListFragment : Fragment(R.layout.fragment_note_list), NoteListAdapter.
             }
         }
 
-        lifecycleScope.launchWhenStarted {
-            viewModel.state.collect { state ->
-                println("${TAG} triggered ${state}")
-                noteAdapter.differAsync.submitList(state.noteList)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.state.collect { state ->
+                    noteAdapter.differAsync.submitList(state.noteList)
+                }
             }
         }
-
     }
 
     private fun fabClicked() {
@@ -120,8 +120,7 @@ class NoteListFragment : Fragment(R.layout.fragment_note_list), NoteListAdapter.
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.adapterPosition
-                val note = noteAdapter.differAsync.currentList[position]
+                val note = noteAdapter.differAsync.currentList[viewHolder.adapterPosition]
                 viewModel.triggerEvent(NoteListEvents.DeleteNote(note))
             }
         }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/darkGrey">
 
     <androidx.appcompat.widget.Toolbar
@@ -12,89 +12,79 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorToolbar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:titleTextColor="#FFF">
+        app:title=""
+        tools:layout_height="?attr/actionBarSize" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingEnd="5dp"
-            android:paddingStart="5dp"
-            >
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tbTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/app_name"
+        android:textColor="#FFFF"
+        android:textSize="25dp"
+        app:layout_constraintBottom_toBottomOf="@id/toolbar"
+        app:layout_constraintStart_toStartOf="@id/toolbar"
+        app:layout_constraintTop_toTopOf="@id/toolbar" />
 
-            <TextView
-                android:id="@+id/tbTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/app_name"
-                android:textColor="#FFFF"
-                android:textSize="25dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/spinner_priority"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="3dp"
+        android:entries="@array/priority"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="@id/saveIcon"
+        app:layout_constraintEnd_toStartOf="@+id/saveIcon"
+        app:layout_constraintTop_toTopOf="@+id/saveIcon" />
 
-            <Spinner
-                android:id="@+id/spinner_priority"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:entries="@array/priority"
-                android:textAlignment="center"
-                android:layout_marginEnd="3dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/saveIcon"
-                app:layout_constraintTop_toTopOf="parent" />
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/saveIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/ic_save"
+        app:layout_constraintBottom_toBottomOf="@id/toolbar"
+        app:layout_constraintEnd_toEndOf="@id/toolbar"
+        app:layout_constraintTop_toTopOf="@id/toolbar" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/saveIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ic_save" 
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.appcompat.widget.Toolbar>
-
-    <com.google.android.material.textfield.TextInputEditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/noteTitle"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:textColor="#FFF"
-        android:padding="5dp"
         android:layout_margin="5dp"
-        android:gravity="center"
-        android:singleLine="true"
-        android:textSize="22sp"
         android:background="@color/darkGrey"
+        android:gravity="center"
+        android:hint="Title"
+        android:padding="5dp"
+        android:singleLine="true"
+        android:textColor="#FFF"
+        android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        tools:text="Title"/>
+        tools:text="Title" />
 
-
-    <com.google.android.material.textfield.TextInputEditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/noteContent"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_margin="5dp"
+        android:layout_marginTop="10dp"
         android:background="@color/lightGrey"
         android:gravity="top"
-        android:textSize="18sp"
+        android:hint="Content..."
         android:padding="25dp"
-        android:layout_margin="5dp"
-        android:textColorHint="#FFF"
         android:textColor="#FFF"
-        android:layout_marginTop="10dp"
-        tools:text="Content..."
+        android:textColorHint="#FFF"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/noteTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/noteTitle"
+        tools:text="Content..." />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

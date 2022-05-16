@@ -125,7 +125,7 @@ class NoteDetailViewModel @Inject constructor(
 
     private fun updateNote(note: Note) {
         viewModelScope.launch(dispatcherProvider.io()) {
-            updateNote.execute(note, this).collect { dataState ->
+            updateNote.execute(note).collect { dataState ->
                 withContext(dispatcherProvider.main()) {
 
                     when (dataState) {
