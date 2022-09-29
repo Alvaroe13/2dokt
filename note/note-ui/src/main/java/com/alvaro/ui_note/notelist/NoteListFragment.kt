@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -38,8 +40,7 @@ class NoteListFragment : Fragment(R.layout.fragment_note_list), NoteListAdapter.
         binding = FragmentNoteListBinding.bind(view)
         super.onViewCreated(view, savedInstanceState)
 
-        initRecyclerView()
-        fabClicked()
+        initViews()
         subscribeObservers()
         attachDeleteNoteCallback()
     }
@@ -81,17 +82,26 @@ class NoteListFragment : Fragment(R.layout.fragment_note_list), NoteListAdapter.
         }
     }
 
-    private fun fabClicked() {
-        binding.fab.setOnClickListener {
-            findNavController().navigate(R.id.action_NoteListFragment_to_noteDetailFragment)
-        }
-    }
-
-    private fun initRecyclerView() {
+    private fun initViews(){
         noteAdapter = NoteListAdapter(this)
-        binding.recycler.apply {
-            adapter = noteAdapter
-            layoutManager = LinearLayoutManager(activity)
+        binding.apply {
+            recycler.apply {
+                adapter = noteAdapter
+                layoutManager = LinearLayoutManager(activity)
+            }
+            fab.setOnClickListener {
+                findNavController().navigate(R.id.action_NoteListFragment_to_noteDetailFragment)
+            }
+            undoCta.setOnClickListener {
+                viewModel.triggerEvent(NoteListEvents.GetCachedNotes)
+                confirmUndoGroup.isGone = true
+                fab.isVisible = true
+            }
+
+            confirmCta.setOnClickListener {
+                confirmUndoGroup.isGone = true
+                fab.isVisible = true
+            }
         }
     }
 
@@ -122,6 +132,8 @@ class NoteListFragment : Fragment(R.layout.fragment_note_list), NoteListAdapter.
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val note = noteAdapter.differAsync.currentList[viewHolder.adapterPosition]
                 viewModel.triggerEvent(NoteListEvents.DeleteNote(note))
+                binding.confirmUndoGroup.isVisible = true
+                binding.fab.isGone = true
             }
         }
 

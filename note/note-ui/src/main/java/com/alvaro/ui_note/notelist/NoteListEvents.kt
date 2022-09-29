@@ -5,4 +5,5 @@ import com.alvaro.note_domain.model.Note
 sealed class NoteListEvents {
     object GetNotes : NoteListEvents()
     data class DeleteNote(val note: Note) : NoteListEvents()
+    object GetCachedNotes : NoteListEvents()
 }

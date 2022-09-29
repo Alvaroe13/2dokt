@@ -9,6 +9,8 @@ class NoteRepositoryImpl (
     private val noteMapper: NoteMapper
 ) : NoteRepository {
 
+    private val notesCached = mutableListOf<Note>()
+
     override suspend fun insertNote(note : Note, forceExceptionForTesting: Boolean) : Long {
         return database.getDao().insertNote(noteMapper.mapFrom(note))
     }
@@ -23,12 +25,18 @@ class NoteRepositoryImpl (
 
     override suspend fun getAllNotes(forceExceptionForTesting: Boolean): List<Note> {
         return database.getDao().getNotesByPriorityDesc().map {
-            noteMapper.mapTo(it)
+            val note = noteMapper.mapTo(it)
+            notesCached.add(note)
+            note
         }
     }
 
     override suspend fun getNoteById(noteId: String, forceExceptionForTesting: Boolean): Note {
         return noteMapper.mapTo( database.getDao().getNoteById(noteId) )
+    }
+
+    override suspend fun getCacheNotes(forceExceptionForTesting: Boolean): List<Note> {
+        return notesCached
     }
 
 }

@@ -10,6 +10,7 @@ import com.alvaro.core.util.Logger
 import com.alvaro.note_domain.model.Note
 import com.alvaro.note_interactors.notelist.DeleteNote
 import com.alvaro.note_interactors.notelist.GetNotes
+import com.alvaro.note_interactors.notelist.RestoreNotesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -21,6 +22,7 @@ import javax.inject.Named
 class NoteListViewModel @Inject constructor(
     private val getNotes: GetNotes,
     private val deleteNote: DeleteNote,
+    private val restoreNotesUseCase: RestoreNotesUseCase,
     private val dispatcherProvider: DispatcherProvider,
     @Named("NoteListView") private val logger: Logger,
 ) : ViewModel() {
@@ -46,8 +48,11 @@ class NoteListViewModel @Inject constructor(
             is NoteListEvents.GetNotes -> {
                 retrieveNoteList()
             }
-            is NoteListEvents.DeleteNote ->{
+            is NoteListEvents.DeleteNote -> {
                 deleteNote(event.note)
+            }
+            is NoteListEvents.GetCachedNotes -> {
+                restoreNotes()
             }
         }
     }
@@ -108,4 +113,34 @@ class NoteListViewModel @Inject constructor(
 
         }
     }
+
+    private fun restoreNotes() {
+        viewModelScope.launch(dispatcherProvider.io()) {
+
+            restoreNotesUseCase().collect { dataState ->
+
+                withContext(dispatcherProvider.main()){
+                    when (dataState) {
+                        is DataState.Data -> {
+                            _state.value = _state.value.copy(
+                                noteList = dataState.data,
+                                loadingState = LoadingState.Idle
+                            )
+                        }
+                        is DataState.Response -> {
+                            when (dataState.uiComponent) {
+                                is UIComponent.None -> {
+                                    logger.log((dataState.uiComponent as UIComponent.None).message)
+                                }
+                                else -> {
+                                    _response.emit(dataState.uiComponent)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }

@@ -9,5 +9,6 @@ interface NoteRepository {
     suspend fun deleteNote(note: Note, forceExceptionForTesting: Boolean = false): Int
     suspend fun getAllNotes(forceExceptionForTesting: Boolean = false): List<Note>
     suspend fun getNoteById(noteId: String, forceExceptionForTesting: Boolean = false): Note
+    suspend fun getCacheNotes(forceExceptionForTesting: Boolean = false): List<Note>
 
 }

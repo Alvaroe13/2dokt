@@ -7,6 +7,8 @@ class NoteRepositoryTestImpl(
     private val notesDatabaseFake: NoteDatabaseFake
 ) : NoteRepository {
 
+    private val notesCachedDatabase: MutableList<Note> = mutableListOf()
+
     override suspend fun insertNote(note: Note, forceExceptionForTesting: Boolean): Long {
         return notesDatabaseFake.insertNote(note, forceExceptionForTesting)
     }
@@ -25,5 +27,9 @@ class NoteRepositoryTestImpl(
 
     override suspend fun getNoteById(noteId: String, forceExceptionForTesting: Boolean): Note {
         return notesDatabaseFake.getNoteById(noteId, forceExceptionForTesting)
+    }
+
+    override suspend fun getCacheNotes(forceExceptionForTesting: Boolean): List<Note> {
+        return notesCachedDatabase
     }
 }

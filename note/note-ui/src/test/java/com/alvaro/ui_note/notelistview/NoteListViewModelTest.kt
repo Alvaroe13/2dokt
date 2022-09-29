@@ -96,7 +96,7 @@ class NoteListViewModelTest {
         job.cancel()
     }*/
 
-    @Test
+  /*  @Test
     fun `collect with eager strategy`() = runBlockingTest {
 
         noteFactory = NoteFactory()
@@ -121,7 +121,7 @@ class NoteListViewModelTest {
         }
 
 
-    }
+    }*/
 
 
 }

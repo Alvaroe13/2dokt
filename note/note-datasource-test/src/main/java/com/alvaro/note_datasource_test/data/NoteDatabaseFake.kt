@@ -45,6 +45,10 @@ class NoteDatabaseFake(
             ?: throw NullPointerException("Note not found in db with id ${noteId}")
     }
 
+    override suspend fun getCacheNotes(forceExceptionForTesting: Boolean): List<Note> {
+        TODO("Not yet implemented")
+    }
+
     //for test only
     fun addNote(){
         notesDatabase.add(noteFactory.buildNote())
@@ -52,7 +56,7 @@ class NoteDatabaseFake(
 
     fun addNotes(){
         noteFactory.buildNotes().forEach {
-            notesDatabase.add(noteFactory.buildNote())
+            notesDatabase.add(it)
         }
     }
 
