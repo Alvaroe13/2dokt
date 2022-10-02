@@ -45,7 +45,7 @@ class NoteDatabaseFake(
             ?: throw NullPointerException("Note not found in db with id ${noteId}")
     }
 
-    override suspend fun getCacheNotes(forceExceptionForTesting: Boolean): List<Note> {
+    override fun getCacheNotes(forceExceptionForTesting: Boolean): List<Note> {
         TODO("Not yet implemented")
     }
 

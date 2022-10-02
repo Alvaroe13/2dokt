@@ -29,7 +29,7 @@ class NoteRepositoryTestImpl(
         return notesDatabaseFake.getNoteById(noteId, forceExceptionForTesting)
     }
 
-    override suspend fun getCacheNotes(forceExceptionForTesting: Boolean): List<Note> {
+    override fun getCacheNotes(forceExceptionForTesting: Boolean): List<Note> {
         return notesCachedDatabase
     }
 }

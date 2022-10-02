@@ -24,19 +24,20 @@ class NoteRepositoryImpl (
     }
 
     override suspend fun getAllNotes(forceExceptionForTesting: Boolean): List<Note> {
-        return database.getDao().getNotesByPriorityDesc().map {
-            val note = noteMapper.mapTo(it)
-            notesCached.add(note)
-            note
-        }
+        return database.getDao().getNotesByPriorityDesc().map { noteMapper.mapTo(it) }.also { updateNotesCached(it) }
     }
 
     override suspend fun getNoteById(noteId: String, forceExceptionForTesting: Boolean): Note {
         return noteMapper.mapTo( database.getDao().getNoteById(noteId) )
     }
 
-    override suspend fun getCacheNotes(forceExceptionForTesting: Boolean): List<Note> {
+    override fun getCacheNotes(forceExceptionForTesting: Boolean): List<Note> {
         return notesCached
+    }
+
+    private fun updateNotesCached(notes: List<Note>){
+        notesCached.clear()
+        notesCached.addAll(notes)
     }
 
 }
