@@ -1,1 +1,0 @@
-C:\Users\alvar\Desktop\Projects\Notes\buildSrc\build\classes\kotlin\main\Build.class;C:\Users\alvar\Desktop\Projects\Notes\buildSrc\build\classes\kotlin\main\Libs.class;C:\Users\alvar\Desktop\Projects\Notes\buildSrc\build\classes\kotlin\main\Version.class
