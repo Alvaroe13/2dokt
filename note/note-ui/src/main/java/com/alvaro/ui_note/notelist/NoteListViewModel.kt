@@ -11,6 +11,8 @@ import com.alvaro.note_domain.model.Note
 import com.alvaro.note_interactors.notelist.DeleteNote
 import com.alvaro.note_interactors.notelist.GetNotes
 import com.alvaro.note_interactors.notelist.RemoveNoteFromCacheUseCase
+import com.alvaro.ui_note.notelist.viewstate.DeletionState
+import com.alvaro.ui_note.notelist.viewstate.NoteListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -70,8 +72,9 @@ class NoteListViewModel @Inject constructor(
                     when (dataState) {
                         is DataState.Data -> {
                            _state.value =  _state.value.copy(
-                                noteList = dataState.data,
-                                loadingState = LoadingState.Idle
+                                noteList = dataState.data ?: emptyList(),
+                                loadingState = LoadingState.Idle,
+                                deletionState = DeletionState.Idle
                            )
                         }
                         is DataState.Response -> {
@@ -130,8 +133,9 @@ class NoteListViewModel @Inject constructor(
                 when (dataState) {
                     is DataState.Data -> {
                         _state.value = _state.value.copy(
-                            noteList = dataState.data,
-                            loadingState = LoadingState.Idle
+                            noteList = dataState.data ?: emptyList(),
+                            loadingState = LoadingState.Idle,
+                            deletionState = DeletionState.OnDeletion
                         )
                     }
                     is DataState.Response -> {

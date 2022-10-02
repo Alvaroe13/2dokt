@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alvaro.core.domain.UIComponent
 import com.alvaro.ui_note.R
 import com.alvaro.ui_note.databinding.FragmentNoteListBinding
+import com.alvaro.ui_note.notelist.viewstate.DeletionState
+import com.alvaro.ui_note.notelist.viewstate.NoteListState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -35,6 +37,7 @@ class NoteListFragment : Fragment(R.layout.fragment_note_list), NoteListAdapter.
     private val viewModel: NoteListViewModel by viewModels()
 
     private lateinit var noteAdapter: NoteListAdapter
+    private lateinit var itemTouchHelper: ItemTouchHelper
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentNoteListBinding.bind(view)
@@ -42,7 +45,7 @@ class NoteListFragment : Fragment(R.layout.fragment_note_list), NoteListAdapter.
 
         initViews()
         subscribeObservers()
-        attachDeleteNoteCallback()
+        createItemTouchHelper()
     }
 
     override fun onResume() {
@@ -84,6 +87,14 @@ class NoteListFragment : Fragment(R.layout.fragment_note_list), NoteListAdapter.
 
     private fun renderState(state: NoteListState){
         noteAdapter.differAsync.submitList(state.noteList)
+        when(state.deletionState){
+            is DeletionState.Idle -> {
+                attachDeleteNoteCallback()
+            }
+            is DeletionState.OnDeletion ->{
+                removeDeleteNoteCallback()
+            }
+        }
     }
 
     private fun initViews(){
@@ -124,8 +135,11 @@ class NoteListFragment : Fragment(R.layout.fragment_note_list), NoteListAdapter.
 
 
     private fun attachDeleteNoteCallback() {
+        itemTouchHelper.attachToRecyclerView(binding.recycler)
+    }
 
-       val itemHelper = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+    private fun createItemTouchHelper() {
+        val itemHelper = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
             override fun onMove(recyclerView: RecyclerView,viewHolder: RecyclerView.ViewHolder,target: RecyclerView.ViewHolder): Boolean {
                 return false
@@ -138,9 +152,12 @@ class NoteListFragment : Fragment(R.layout.fragment_note_list), NoteListAdapter.
                 binding.fab.isGone = true
             }
         }
+        itemTouchHelper = ItemTouchHelper(itemHelper)
+    }
 
-        val swipeToDelete = ItemTouchHelper(itemHelper as ItemTouchHelper.SimpleCallback)
-        swipeToDelete.attachToRecyclerView(binding.recycler)
+
+    private fun removeDeleteNoteCallback(){
+        itemTouchHelper.attachToRecyclerView(null)
     }
 
     override fun itemClick(noteId: String) {
