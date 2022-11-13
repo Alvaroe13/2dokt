@@ -13,6 +13,7 @@ import com.alvaro.note_interactors.notelist.GetNotes
 import com.alvaro.note_interactors.notelist.RemoveNoteFromCacheUseCase
 import com.alvaro.ui_note.notelist.viewstate.DeletionState
 import com.alvaro.ui_note.notelist.viewstate.NoteListState
+import com.alvaro.ui_note.notelist.viewstate.NoteListViewEventManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -26,6 +27,7 @@ class NoteListViewModel @Inject constructor(
     private val deleteNote: DeleteNote,
     private val removeNoteFromCacheUseCase: RemoveNoteFromCacheUseCase,
     private val dispatcherProvider: DispatcherProvider,
+    private val eventManager: NoteListViewEventManager,
     @Named("NoteListView") private val logger: Logger,
 ) : ViewModel() {
 
@@ -45,17 +47,22 @@ class NoteListViewModel @Inject constructor(
 
     fun triggerEvent(event: NoteListEvents) {
 
+        if(eventManager.isEventActive(event)){
+            return
+        }
+        eventManager.addEvent(event)
+
         _state.value = _state.value.copy(loadingState = LoadingState.Loading)
 
         when (event) {
             is NoteListEvents.GetNotes -> {
-                retrieveNoteList()
+                retrieveNoteList(event)
             }
             is NoteListEvents.RemoveNoteFromCache -> {
-                removeNoteFromCache(event.note)
+                removeNoteFromCache(event)
             }
             is NoteListEvents.ConfirmDeletion -> {
-                deleteNote(event.note)
+                deleteNote(event)
             }
             is NoteListEvents.UndoDeletion -> {
                 undoDeletion()
@@ -63,7 +70,7 @@ class NoteListViewModel @Inject constructor(
         }
     }
 
-    private fun retrieveNoteList() {
+    private fun retrieveNoteList(event: NoteListEvents) {
        viewModelScope.launch(dispatcherProvider.io()) {
 
             getNotes.execute().collect { dataState ->
@@ -92,15 +99,17 @@ class NoteListViewModel @Inject constructor(
 
             }
 
+        }.invokeOnCompletion {
+            eventManager.removeEvent(event)
         }
     }
 
-    private fun deleteNote(note: Note){
+    private fun deleteNote(event : NoteListEvents.ConfirmDeletion){
         noteForDeletion = null
 
         viewModelScope.launch(dispatcherProvider.io()) {
 
-            deleteNote.execute(note).collect { dataState ->
+            deleteNote.execute(event.note).collect { dataState ->
 
                 when (dataState) {
                     is DataState.Data -> {
@@ -120,15 +129,17 @@ class NoteListViewModel @Inject constructor(
 
             }
 
+        }.invokeOnCompletion {
+            eventManager.removeEvent(event)
         }
     }
 
-    private fun removeNoteFromCache(note: Note) {
-        noteForDeletion = note
+    private fun removeNoteFromCache(event: NoteListEvents.RemoveNoteFromCache) {
+        noteForDeletion = event.note
 
         viewModelScope.launch(dispatcherProvider.main()) {
 
-            removeNoteFromCacheUseCase(note).also { dataState ->
+            removeNoteFromCacheUseCase(event.note).also { dataState ->
 
                 when (dataState) {
                     is DataState.Data -> {
@@ -150,6 +161,8 @@ class NoteListViewModel @Inject constructor(
                     }
                 }
             }
+        }.invokeOnCompletion {
+            eventManager.removeEvent(event)
         }
     }
 

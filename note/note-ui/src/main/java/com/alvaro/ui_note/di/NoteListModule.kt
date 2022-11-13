@@ -5,6 +5,7 @@ import com.alvaro.note_domain.repository.NoteRepository
 import com.alvaro.note_interactors.notelist.DeleteNote
 import com.alvaro.note_interactors.notelist.GetNotes
 import com.alvaro.note_interactors.notelist.RemoveNoteFromCacheUseCase
+import com.alvaro.ui_note.notelist.viewstate.NoteListViewEventManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -42,5 +43,11 @@ object NoteListModule {
     @Singleton
     fun provideRestoreNotesInteractor(noteRepository: NoteRepository): RemoveNoteFromCacheUseCase {
         return RemoveNoteFromCacheUseCase(noteRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNoteListViewEventManager(): NoteListViewEventManager {
+        return NoteListViewEventManager()
     }
 }
